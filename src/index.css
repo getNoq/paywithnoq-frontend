@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@font-face {
+  font-family: 'FuturaMDBold';
+  src: url('/fonts/futura/futuramdbt_bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* ─── Tokens ─────────────────────────────────────────────────────────────── */
+:root {
+  --green:        #00c853;
+  --green-mid:    #009624;
+  --green-dark:   #006400;
+  --naija:        #008751;
+  --bg:           #090d0c;
+  --surface:      #111815;
+  --surface2:     #172019;
+  --surface3:     #1e2b22;
+  --border:       rgba(0, 200, 83, 0.1);
+  --border-hover: rgba(0, 200, 83, 0.28);
+  --text:         #dff0e4;
+  --text-muted:   #6b927a;
+  --text-faint:   #3d5445;
+  --white:        #ffffff;
+  --danger:       #ff5252;
+  --danger-bg:    rgba(255, 82, 82, 0.08);
+  --gold:         #ffd54f;
+  --gold-bg:      rgba(255, 213, 79, 0.08);
+
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   24px;
+
+  --font-display: 'FuturaMDBold', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  /* --font-body:    'DM Sans', sans-serif; */
+
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+/* .font-futura {
+  font-family: "FuturaMDBold";
+} */
+
+body {
+  font-family: var(--font-body);
+  /* No solid bg — the AdBackground component provides the background */
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* Grid overlay — sits above the ad image (z-index: -1) but below app content */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,83,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,83,0.03) 1px, transparent 1px);
+  background-size: 36px 36px;
+  pointer-events: none;
+  z-index: 0;  /* above ad overlay (z-index: -1), below app content (z-index: 1) */
+}
+
+#root { position: relative; z-index: 1; }
+
+/* ─── Scrollbar ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+
+/* ─── Typography ─────────────────────────────────────────────────────────── */
+h1, h2, h3 { font-family: var(--font-display); font-weight: 800; line-height: 1.15; }
+
+/* ─── Utility ────────────────────────────────────────────────────────────── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px !important;
+}
+
+/* ─── AppLayout ────────────────────────────────────────────────────────────── */
+
+/* Layout wrapper */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 👈 move upward on mobile */
+  padding: 110px 0 80px; /* slightly more top breathing room */
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.amount-input {
+  font-size: 28px !important;
+}
+
+/* Fixed header */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  width: 100%;
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  z-index: 100;
+
+  background: rgba(9, 13, 12, 0.85);
+  backdrop-filter: blur(10px);
+}
+
+/* Main card */
+.app-main {
+  width: 90%;
+  max-width: 520px;
+  height: 60vh;
+  position: fixed;
+
+  border-radius: 16px;
+  background-color: rgba(23, 32, 25, 0.9);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* prevents outer scroll */
+}
+
+/* Scrollable content */
+.app-main-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Desktop adjustments */
+@media (min-width: 768px) {
+  .app-main {
+    width: 100%;
+    height: 70vh;
+  }
+  .app-container {
+    justify-content: center;
+  }
+}
