@@ -83,7 +83,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
   hint?: string
   error?: string
-  prefix?: React.ReactNode
+  startIcon?: React.ReactNode
   suffix?: React.ReactNode
 }
 
