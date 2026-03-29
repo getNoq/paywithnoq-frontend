@@ -8,6 +8,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Effra';
+  src: url('/fonts/effra/Effra_Bd.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
 /* ─── Tokens ─────────────────────────────────────────────────────────────── */
 :root {
   --green:        #00c853;
@@ -29,13 +36,15 @@
   --gold:         #ffd54f;
   --gold-bg:      rgba(255, 213, 79, 0.08);
 
+  --radius-xs:   4px;
   --radius-sm:   8px;
   --radius-md:   12px;
   --radius-lg:   18px;
   --radius-xl:   24px;
 
-  --font-display: 'FuturaMDBold', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  /* --font-display: 'FuturaMDBold', sans-serif; */
+  --font-display: 'Effra', sans-serif;
+  --font-body: 'Effra', sans-serif;
   /* --font-body:    'DM Sans', sans-serif; */
 
   --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -140,7 +149,7 @@ textarea {
   height: 60vh;
   position: fixed;
 
-  border-radius: 16px;
+  border-radius: 8px;
   background-color: rgba(23, 32, 25, 0.9);
 
   display: flex;
