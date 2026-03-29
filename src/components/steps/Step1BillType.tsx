@@ -22,10 +22,10 @@ export function Step1BillType() {
 
       {/* Bill type grid */}
       <motion.div variants={fadeUp}>
-        <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '1.2px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '12px' }}>
-          What would you like to pay?
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+        {/* <p style={{ fontSize: '14px', fontWeight: 500, textTransform: 'capitalize', color: 'var(--text-muted)', marginBottom: '12px' }}>
+          What would you like to pay? Select Network Provider
+        </p> */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
           {BILL_OPTIONS.map(opt => {
             const isSelected = selectedBillType === opt.id
             return (
@@ -38,8 +38,8 @@ export function Step1BillType() {
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
                   padding: '16px 10px',
                   background: isSelected ? 'rgba(0,200,83,0.07)' : 'var(--surface)',
-                  border: `1.5px solid ${isSelected ? 'var(--green)' : 'var(--border)'}`,
-                  borderRadius: 'var(--radius-md)',
+                  border: `1px solid ${isSelected ? 'var(--green)' : 'var(--border)'}`,
+                  borderRadius: 'var(--radius-xs)',
                   cursor: opt.available ? 'pointer' : 'not-allowed',
                   opacity: opt.available ? 1 : 0.4,
                   transition: 'var(--transition)',
@@ -61,7 +61,7 @@ export function Step1BillType() {
                 <span style={{ fontSize: '24px' }}>{opt.icon}</span>
                 <span style={{
                   fontFamily: 'var(--font-display)',
-                  fontSize: '12px', fontWeight: 700,
+                  fontSize: '14px', fontWeight: 700,
                   color: isSelected ? 'var(--green)' : 'var(--text)',
                 }}>
                   {opt.label}

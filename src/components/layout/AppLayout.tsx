@@ -34,7 +34,7 @@ function StepHeading() {
   const { step, selectedBillType, currentTransaction } = usePaymentStore()
   if (currentTransaction) return null
   const headings: Record<number, { title: string; sub: string }> = {
-    1: { title: 'New Payment', sub: selectedBillType ? 'Select your provider' : 'Choose what you want to pay' },
+    1: { title: 'Bill Payments', sub: selectedBillType ? 'Choose what you want to pay' : 'Choose what you want to pay' },
     // 1: { title: 'New Payment', sub: selectedBillType ? '' : '' },
     2: { title: 'Payment Details', sub: selectedBillType ? `Pay your ${billTypeLabels[selectedBillType]} bill instantly` : '' },
     3: { title: 'Confirm Payment', sub: 'Review before you pay' },
