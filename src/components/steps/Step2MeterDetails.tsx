@@ -154,7 +154,7 @@ export function Step2MeterDetails() {
             placeholder="Enter 11-digit meter number"
             inputMode="numeric"
             maxLength={13}
-            prefix={<Zap size={15} />}
+            startIcon={<Zap size={15} />}
             error={errors.meterNumber?.message}
             {...register('meterNumber', { onChange: () => setLookedUp(null) })}
           />
