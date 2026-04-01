@@ -147,8 +147,8 @@ export function Step3Confirm() {
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               padding: '10px 18px',
             }}>
-              <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{row.label}</span>
-              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', textAlign: 'right', maxWidth: '60%' }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--text-muted)' }}>{row.label}</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 600, color: 'var(--text)', textAlign: 'right', maxWidth: '60%' }}>
                 {row.value}
               </span>
             </div>
@@ -163,7 +163,7 @@ export function Step3Confirm() {
           <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>Total payable</span>
           <span style={{
             fontFamily: 'var(--font-display)', fontWeight: 800,
-            fontSize: '22px', color: 'var(--green)',
+            fontSize: '22px', color: 'var(--blue-light)',
           }}>
             {formatNaira(amount ?? 0)}
           </span>
@@ -191,7 +191,7 @@ export function Step3Confirm() {
         onClick={handlePay}
         style={{
           width: '100%',
-          background: 'linear-gradient(135deg, var(--green) 0%, var(--naija) 100%)',
+          background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
           border: 'none',
           borderRadius: 'var(--radius-md)',
           padding: '16px',

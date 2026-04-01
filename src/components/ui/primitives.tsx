@@ -1,6 +1,8 @@
 import React from 'react'
 import { clsx } from 'clsx'
 import { Loader2 } from 'lucide-react'
+import '../../index.css'
+import { start } from 'node:repl'
 
 // ─── Button ───────────────────────────────────────────────────────────────────
 
@@ -77,88 +79,334 @@ function buttonStyle(variant: string, size: string): React.CSSProperties {
   return base
 }
 
-// ─── Input ────────────────────────────────────────────────────────────────────
+// // ─── Input ────────────────────────────────────────────────────────────────────
+
+// interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+//   label?: string
+//   hint?: string
+//   error?: string
+//   startIcon?: React.ReactNode
+//   suffix?: React.ReactNode
+// }
+
+// export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+//   ({ label, hint, error, prefix, suffix, className, id, ...props }, ref) => {
+//     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-')
+//     return (
+//       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
+//         {label && (
+//           <label htmlFor={inputId} style={labelStyle}>
+//             {label}
+//           </label>
+//         )}
+//         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+//           {prefix && (
+//             <span style={{
+//               position: 'absolute', left: '13px',
+//               color: error ? 'var(--danger)' : 'var(--green)',
+//               fontSize: '14px', pointerEvents: 'none',
+//               display: 'flex', alignItems: 'center',
+//             }}>
+//               {prefix}
+//             </span>
+//           )}
+//           <input
+//             ref={ref}
+//             id={inputId}
+//             style={{
+//               width: '100%',
+//               background: 'var(--surface2)',
+//               border: `1.5px solid ${error ? 'var(--danger)' : 'var(--border)'}`,
+//               borderRadius: 'var(--radius-sm)',
+//               padding: `12px 14px 12px ${prefix ? '40px' : '14px'}`,
+//               paddingRight: suffix ? '40px' : '14px',
+//               color: 'var(--text)',
+//               fontFamily: 'var(--font-body)',
+//               fontSize: '15px',
+//               outline: 'none',
+//               transition: 'var(--transition)',
+//             }}
+//             onFocus={e => {
+//               e.currentTarget.style.borderColor = error ? 'var(--danger)' : 'var(--green)'
+//               e.currentTarget.style.boxShadow = `0 0 0 3px ${error ? 'rgba(255,82,82,0.1)' : 'rgba(0,200,83,0.1)'}`
+//             }}
+//             onBlur={e => {
+//               e.currentTarget.style.borderColor = error ? 'var(--danger)' : 'var(--border)'
+//               e.currentTarget.style.boxShadow = 'none'
+//             }}
+//             {...props}
+//           />
+//           {suffix && (
+//             <span style={{
+//               position: 'absolute', right: '13px',
+//               color: 'var(--text-muted)', fontSize: '13px',
+//               pointerEvents: 'none', display: 'flex', alignItems: 'center',
+//             }}>
+//               {suffix}
+//             </span>
+//           )}
+//         </div>
+//         {error && <span style={{ fontSize: '12px', color: 'var(--danger)' }}>{error}</span>}
+//         {hint && !error && <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{hint}</span>}
+//       </div>
+//     )
+//   }
+// )
+// Input.displayName = 'Input'
+
+// const labelStyle: React.CSSProperties = {
+//   fontSize: '11px',
+//   fontWeight: 500,
+//   textTransform: 'uppercase',
+//   letterSpacing: '1.2px',
+//   color: 'var(--text-muted)',
+// }
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
   hint?: string
   error?: string
+  optional?: boolean          // shows "optional" badge next to label
   startIcon?: React.ReactNode
-  suffix?: React.ReactNode
+  verifyButton?: React.ReactNode
 }
-
+ 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ label, hint, error, prefix, suffix, className, id, ...props }, ref) => {
+  (
+    {
+      label,
+      hint,
+      error,
+      optional = false,
+      startIcon,
+      verifyButton,
+      id,
+      value,
+      defaultValue,
+      onChange,
+      onFocus,
+      onBlur,
+      style,
+      ...props
+    },
+    ref
+  ) => {
     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-')
+ 
+    // ── Track whether input has content ────────────────────────────────────
+    // Must handle ALL ways a value can arrive:
+    //   1. Controlled via `value` prop (RHF, state)
+    //   2. Controlled via `defaultValue` (uncontrolled)
+    //   3. User typing (onInput)
+    //   4. Parent calling setValue programmatically (e.g. quick amounts)
+    const [internalHasValue, setInternalHasValue] = React.useState<boolean>(() => {
+      if (value !== undefined) return String(value).length > 0
+      if (defaultValue !== undefined) return String(defaultValue).length > 0
+      return false
+    })
+ 
+    // Sync with controlled `value` prop — handles programmatic updates
+    // like quick-amount buttons calling setValue()
+    React.useEffect(() => {
+      if (value !== undefined) {
+        setInternalHasValue(String(value).length > 0)
+      }
+    }, [value])
+ 
+    const [isFocused, setIsFocused] = React.useState(false)
+ 
+    // Label floats up when: focused OR has content
+    const labelFloated = isFocused || internalHasValue
+ 
+    // ── Padding calculation ────────────────────────────────────────────────
+    // Measure the verify button slot precisely instead of hardcoding 90px.
+    // We reserve space only when verifyButton is present.
+    const verifyButtonRef = React.useRef<HTMLDivElement>(null)
+    const [verifyButtonWidth, setVerifyButtonWidth] = React.useState(0)
+ 
+    React.useLayoutEffect(() => {
+      if (verifyButtonRef.current) {
+        setVerifyButtonWidth(verifyButtonRef.current.offsetWidth + 8) // 8px gap
+      }
+    }, [verifyButton])
+ 
+    const paddingLeft  = startIcon ? '44px' : '14px'
+    const paddingRight = verifyButton ? `${verifyButtonWidth + 8}px` : '14px'
+ 
+    // ── Border color ───────────────────────────────────────────────────────
+    const borderColor = error
+      ? 'var(--danger)'
+      : isFocused
+      ? 'var(--blue-light)'
+      : 'var(--border)'
+ 
+    // ── Handlers that compose with spread props ────────────────────────────
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+      setInternalHasValue(e.currentTarget.value.length > 0)
+      onChange?.(e)
+    }
+ 
+    function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
+      setIsFocused(true)
+      onFocus?.(e)
+    }
+ 
+    function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
+      setIsFocused(false)
+      setInternalHasValue(e.currentTarget.value.length > 0)
+      onBlur?.(e)
+    }
+ 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
-        {label && (
-          <label htmlFor={inputId} style={labelStyle}>
-            {label}
-          </label>
-        )}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '100%' }}>
         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          {prefix && (
+ 
+          {/* ── Start icon ─────────────────────────────────────────────── */}
+          {startIcon && (
             <span style={{
-              position: 'absolute', left: '13px',
-              color: error ? 'var(--danger)' : 'var(--green)',
-              fontSize: '14px', pointerEvents: 'none',
-              display: 'flex', alignItems: 'center',
+              position: 'absolute',
+              left: '13px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: isFocused ? 'var(--green)' : error ? 'var(--danger)' : 'var(--text-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              pointerEvents: 'none',
+              transition: 'color 0.2s ease',
+              zIndex: 1,
             }}>
-              {prefix}
+              {startIcon}
             </span>
           )}
+ 
+          {/* ── Input ──────────────────────────────────────────────────── */}
           <input
             ref={ref}
             id={inputId}
+            value={value}
+            defaultValue={defaultValue}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            // placeholder=" " keeps the label-as-placeholder trick working
+            // without showing any placeholder text
+            placeholder=" "
             style={{
               width: '100%',
-              background: 'var(--surface2)',
-              border: `1.5px solid ${error ? 'var(--danger)' : 'var(--border)'}`,
-              borderRadius: 'var(--radius-sm)',
-              padding: `12px 14px 12px ${prefix ? '40px' : '14px'}`,
-              paddingRight: suffix ? '40px' : '14px',
-              color: 'var(--text)',
-              fontFamily: 'var(--font-body)',
+              height: '58px',
+              paddingTop: label ? '20px' : '0',      // room for floated label
+              paddingBottom: label ? '6px' : '0',
+              paddingLeft,
+              paddingRight,
+              borderRadius: 'var(--radius-xs)',
+              border: `1.5px solid ${borderColor}`,
               fontSize: '15px',
               outline: 'none',
-              transition: 'var(--transition)',
-            }}
-            onFocus={e => {
-              e.currentTarget.style.borderColor = error ? 'var(--danger)' : 'var(--green)'
-              e.currentTarget.style.boxShadow = `0 0 0 3px ${error ? 'rgba(255,82,82,0.1)' : 'rgba(0,200,83,0.1)'}`
-            }}
-            onBlur={e => {
-              e.currentTarget.style.borderColor = error ? 'var(--danger)' : 'var(--border)'
-              e.currentTarget.style.boxShadow = 'none'
+              background: 'var(--surface2)',
+              color: 'var(--text)',
+              fontFamily: 'var(--font-body)',
+              transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+              boxShadow: isFocused
+                ? `0 0 0 3px ${error ? 'rgba(255,82,82,0.1)' : 'rgba(0,200,83,0.1)'}`
+                : 'none',
+              ...style,
             }}
             {...props}
           />
-          {suffix && (
-            <span style={{
-              position: 'absolute', right: '13px',
-              color: 'var(--text-muted)', fontSize: '13px',
-              pointerEvents: 'none', display: 'flex', alignItems: 'center',
-            }}>
-              {suffix}
-            </span>
+ 
+          {/* ── Floating label ─────────────────────────────────────────── */}
+          {label && (
+            <label
+              htmlFor={inputId}
+              style={{
+                position: 'absolute',
+                left: startIcon ? '44px' : '14px',
+                // Float up to top of input when active, center when idle
+                top: labelFloated ? '8px' : '50%',
+                transform: labelFloated ? 'none' : 'translateY(-50%)',
+                fontSize: labelFloated ? '10px' : '15px',
+                fontWeight: labelFloated ? 500 : 400,
+                letterSpacing: labelFloated ? '0.5px' : '0',
+                color: labelFloated
+                  ? isFocused
+                    ? error ? 'var(--danger)' : 'var(--blue-light)'
+                    : error ? 'var(--danger)' : 'var(--text-muted)'
+                  : 'var(--text-faint)',
+                pointerEvents: 'none',
+                transition: 'all 0.18s cubic-bezier(0.4, 0, 0.2, 1)',
+                whiteSpace: 'nowrap',
+                userSelect: 'none',
+                lineHeight: 1,
+              }}
+            >
+              {label}
+              {optional && (
+                <span style={{
+                  marginLeft: '5px',
+                  fontSize: '9px',
+                  fontWeight: 500,
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  color: 'var(--text-faint)',
+                  background: 'var(--surface3)',
+                  padding: '1px 5px',
+                  borderRadius: '3px',
+                  verticalAlign: 'middle',
+                }}>
+                  optional
+                </span>
+              )}
+            </label>
+          )}
+ 
+          {/* ── Verify button ───────────────────────────────────────────── */}
+          {/* Rendered inside a measured ref div so padding adjusts to its
+              actual width — not a hardcoded magic number */}
+          {verifyButton && (
+            <div
+              ref={verifyButtonRef}
+              style={{
+                position: 'absolute',
+                right: '6px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                // Isolated from the input — clicks here don't blur/focus input
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {verifyButton}
+            </div>
           )}
         </div>
-        {error && <span style={{ fontSize: '12px', color: 'var(--danger)' }}>{error}</span>}
-        {hint && !error && <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{hint}</span>}
+ 
+        {/* ── Error / hint ─────────────────────────────────────────────── */}
+        {error ? (
+          <span style={{
+            fontSize: '11px',
+            color: 'var(--danger)',
+            paddingLeft: '2px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}>
+            {error}
+          </span>
+        ) : hint ? (
+          <span style={{
+            fontSize: '11px',
+            color: 'var(--text-muted)',
+            paddingLeft: '2px',
+          }}>
+            {hint}
+          </span>
+        ) : null}
       </div>
     )
   }
 )
+ 
 Input.displayName = 'Input'
-
-const labelStyle: React.CSSProperties = {
-  fontSize: '11px',
-  fontWeight: 500,
-  textTransform: 'uppercase',
-  letterSpacing: '1.2px',
-  color: 'var(--text-muted)',
-}
 
 // ─── Card ─────────────────────────────────────────────────────────────────────
 
@@ -252,8 +500,8 @@ export function ToggleGroup<T extends string>({ options, value, onChange }: Togg
       gridTemplateColumns: `repeat(${options.length}, 1fr)`,
       gap: '6px',
       background: 'var(--surface2)',
-      border: '1px solid var(--border)',
-      borderRadius: 'var(--radius-md)',
+      border: '1.5px solid var(--border)',
+      borderRadius: 'var(--radius-sm)',
       padding: '4px',
     }}>
       {options.map(opt => (
@@ -262,11 +510,12 @@ export function ToggleGroup<T extends string>({ options, value, onChange }: Togg
           type="button"
           onClick={() => onChange(opt.value)}
           style={{
-            padding: '9px 12px',
+            padding: '12px',
             border: 'none',
-            borderRadius: 'var(--radius-sm)',
-            background: value === opt.value ? 'var(--surface3)' : 'transparent',
-            color: value === opt.value ? 'var(--green)' : 'var(--text-muted)',
+            borderRadius: 'var(--radius-xs)',
+            // background: value === opt.value ? 'var(--surface3)' : 'transparent',
+            background: value === opt.value ? 'linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%)' : 'transparent',
+            color: value === opt.value ? 'var(--white)' : 'var(--white)',
             fontFamily: 'var(--font-body)',
             fontWeight: 500,
             fontSize: '13px',

@@ -34,15 +34,17 @@ function StepHeading() {
   const { step, selectedBillType, currentTransaction } = usePaymentStore()
   if (currentTransaction) return null
   const headings: Record<number, { title: string; sub: string }> = {
-    1: { title: 'Bill Payments', sub: selectedBillType ? 'Choose what you want to pay' : 'Choose what you want to pay' },
+    1: { title: 'Pay Your Bills Instantly with Noq', sub: selectedBillType ? '' : '' },
     // 1: { title: 'New Payment', sub: selectedBillType ? '' : '' },
-    2: { title: 'Payment Details', sub: selectedBillType ? `Pay your ${billTypeLabels[selectedBillType]} bill instantly` : '' },
-    3: { title: 'Confirm Payment', sub: 'Review before you pay' },
+    // 2: { title: 'Payment Details', sub: selectedBillType ? `Pay your ${billTypeLabels[selectedBillType]} bill instantly` : '' },
+    2: { title: 'Payment Details', sub: selectedBillType ? '' : '' },
+    // 3: { title: 'Confirm Payment', sub: 'Review before you pay' },
+    3: { title: 'Confirm Payment', sub: '' },
   }
   const h = headings[step]
   return (
     <div style={{ marginBottom: '16px' }}>
-      <h1 style={{ fontSize: '24px', color: 'var(--white)', marginBottom: '2px' }}>{h.title}</h1>
+      <h1 style={{ fontSize: '24px', color: 'var(--white)', marginBottom: '2px', lineHeight: '32px' }}>{h.title}</h1>
       {h.sub && <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{h.sub}</p>}
     </div>
   )
@@ -182,9 +184,22 @@ export function AppLayout() {
                     fontFamily: 'var(--font-body)', transition: 'var(--transition)',
                     outline: 'none',
                     marginBottom: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
                   }}
                 >
-                  ← Back
+                  <svg xmlns="http://www.w3.org/2000/svg" 
+                      width="16" 
+                      height="16" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      stroke-width="2" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg> 
+                Back
                 </button>
               )}
               <StepHeading />
@@ -202,8 +217,9 @@ export function AppLayout() {
         <nav style={{
           position: 'fixed', bottom: 0, left: 0, right: 0,
           display: 'flex', justifyContent: 'center',
-          padding: '0 20px 12px',
-          background: 'linear-gradient(to top, rgba(9,13,12,0.97) 60%, transparent)',
+          padding: '0 20px 24px',
+          // background: 'linear-gradient(to top, rgba(9,13,12,0.97) 60%, transparent)',
+          background: 'linear-gradient(to top, #222 20%, transparent)',
           zIndex: 50,
         }}>
           <div style={{
@@ -228,15 +244,15 @@ export function AppLayout() {
                     padding: '10px 20px',
                     borderRadius: 'var(--radius-lg)',
                     border: 'none',
-                    background: active ? 'rgba(0,200,83,0.12)' : 'transparent',
-                    color: active ? 'var(--green)' : 'var(--text-muted)',
+                    background: active ? 'var(--surface)' : 'transparent',
+                    color: active ? 'var(--blue-light)' : 'var(--text-muted)',
                     fontFamily: 'var(--font-display)',
                     fontWeight: active ? 700 : 500,
                     fontSize: '14px',
                     cursor: 'pointer',
                     transition: 'var(--transition)',
                     outline: 'none',
-                    boxShadow: active ? '0 0 0 1px rgba(0,200,83,0.2)' : 'none',
+                    boxShadow: active ? '0 0 0 1px var(--blue-light)' : 'none',
                   }}
                 >
                   <Icon size={16} />

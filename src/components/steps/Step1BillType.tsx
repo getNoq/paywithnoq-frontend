@@ -22,9 +22,9 @@ export function Step1BillType() {
 
       {/* Bill type grid */}
       <motion.div variants={fadeUp}>
-        {/* <p style={{ fontSize: '14px', fontWeight: 500, textTransform: 'capitalize', color: 'var(--text-muted)', marginBottom: '12px' }}>
-          What would you like to pay? Select Network Provider
-        </p> */}
+        <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px', letterSpacing: '0.5px' }}>
+          What would you like to pay?
+        </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
           {BILL_OPTIONS.map(opt => {
             const isSelected = selectedBillType === opt.id
@@ -37,13 +37,13 @@ export function Step1BillType() {
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
                   padding: '16px 10px',
-                  background: isSelected ? 'rgba(0,200,83,0.07)' : 'var(--surface)',
+                  background: isSelected ? 'var(--surface)' : 'var(--surface)',
                   border: `1px solid ${isSelected ? 'var(--green)' : 'var(--border)'}`,
                   borderRadius: 'var(--radius-xs)',
                   cursor: opt.available ? 'pointer' : 'not-allowed',
                   opacity: opt.available ? 1 : 0.4,
                   transition: 'var(--transition)',
-                  boxShadow: isSelected ? '0 0 0 1px var(--green), 0 4px 20px rgba(0,200,83,0.1)' : 'none',
+                  boxShadow: isSelected ? '0 0 0 1px var(--blue-light), 0 4px 20px rgba(0,200,83,0.1)' : 'none',
                   outline: 'none',
                   position: 'relative',
                 }}
@@ -58,11 +58,25 @@ export function Step1BillType() {
                     SOON
                   </span>
                 )}
+                
+        {/* Green check */}
+        {opt.available && isSelected && (
+                  <span style={{
+                    position: 'absolute', top: '6px', right: '6px',
+          width: 18, height: 18, borderRadius: '50%',
+          background: 'var(--blue-light)',
+          color: 'white', fontSize: '10px', fontWeight: 700,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0,
+                  }}>
+                    ✓
+                  </span>
+                )}
                 <span style={{ fontSize: '24px' }}>{opt.icon}</span>
                 <span style={{
                   fontFamily: 'var(--font-display)',
-                  fontSize: '14px', fontWeight: 700,
-                  color: isSelected ? 'var(--green)' : 'var(--text)',
+                  fontSize: '12px', fontWeight: 700,
+                  color: isSelected ? 'var(--blue-light)' : 'var(--text)',
                 }}>
                   {opt.label}
                 </span>
@@ -73,7 +87,7 @@ export function Step1BillType() {
       </motion.div>
 
       {/* Provider grid — same layout as bill type grid, revealed after selection */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {selectedBillType && providers.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -83,8 +97,8 @@ export function Step1BillType() {
           >
             <p style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '1.2px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '12px' }}>
               Select your distribution company
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+            </p> */}
+            {/* <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
               {providers.map((p, i) => {
                 const isSelected = selectedProvider?.id === p.id
                 return (
@@ -109,7 +123,6 @@ export function Step1BillType() {
                       position: 'relative',
                     }}
                   >
-                    {/* Selected checkmark */}
                     {isSelected && (
                       <span style={{
                         position: 'absolute', top: '6px', right: '6px',
@@ -146,14 +159,110 @@ export function Step1BillType() {
                   </motion.button>
                 )
               })}
-            </div>
+            </div>  */}
+            {/* Provider dropdown */}
+{/* <div style={{ position: 'relative', width: '100%' }}> */}
+
+  {/* Selected state display — acts as the trigger */}
+  {/* <div
+    style={{
+      display: 'flex', alignItems: 'center', gap: '12px',
+      padding: '0 14px',
+      height: '58px',
+      background: 'var(--surface2)',
+      border: `1.5px solid ${selectedProvider ? 'var(--green)' : 'var(--border)'}`,
+      borderRadius: 'var(--radius-md)',
+      cursor: 'pointer',
+      transition: 'var(--transition)',
+      boxShadow: selectedProvider ? '0 0 0 3px rgba(0,200,83,0.1)' : 'none',
+      position: 'relative',
+    }}
+  >
+    {selectedProvider ? ( */}
+      <>
+        {/* Optional icon */}
+        {/* <span style={{ fontSize: '18px', flexShrink: 0 }}>{selectedProvider.icon}</span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '14px', fontWeight: 700,
+            color: 'var(--green)',
+            lineHeight: 1.2,
+          }}>
+            {selectedProvider.shortName}
+          </div>
+          <div style={{
+            fontSize: '11px',
+            color: 'var(--text-muted)',
+            marginTop: '2px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}>
+            {selectedProvider.region}
+          </div>
+        </div> */}
+        {/* Green check */}
+        {/* <span style={{
+          width: 18, height: 18, borderRadius: '50%',
+          background: 'var(--green)',
+          color: 'white', fontSize: '10px', fontWeight: 700,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0,
+        }}>✓</span> */}
+      </>
+    {/* // ) : (
+    //   <span style={{ fontSize: '14px', color: 'var(--text-faint)', fontFamily: 'var(--font-body)' }}>
+    //     Select your distribution company
+    //   </span>
+    // )} */}
+
+    {/* Chevron */}
+    {/* <svg
+      width="14" height="14" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+      style={{
+        position: 'absolute', right: '14px',
+        color: selectedProvider ? 'var(--green)' : 'var(--text-faint)',
+        pointerEvents: 'none', flexShrink: 0,
+      }}
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg> */}
+
+    {/* Native select — invisible, covers the entire div */}
+    {/* <select
+      value={selectedProvider?.id ?? ''}
+      onChange={e => {
+        const found = providers.find(p => p.id === e.target.value)
+        if (found) setProvider(found)
+      }}
+      style={{
+        position: 'absolute', inset: 0,
+        opacity: 0,
+        width: '100%', height: '100%',
+        cursor: 'pointer',
+        // font-size >= 16px prevents iOS zoom on focus
+        fontSize: '16px',
+      }}
+    >
+      <option value="" disabled>Select distribution company</option>
+      {providers.map(p => (
+        <option key={p.id} value={p.id}>
+          {p.shortName} - {p.region}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       {/* Continue button — only appears once provider is selected */}
       <AnimatePresence>
-        {selectedProvider && (
+        {/* {selectedProvider && ( */}
+        {selectedBillType && providers.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -165,9 +274,9 @@ export function Step1BillType() {
               onClick={() => usePaymentStore.getState().setStep(2)}
               style={{
                 width: '100%',
-                background: 'linear-gradient(135deg, var(--green) 0%, var(--naija) 100%)',
+                background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
                 border: 'none',
-                borderRadius: 'var(--radius-md)',
+                borderRadius: 'var(--radius-xs)',
                 padding: '16px',
                 color: 'white',
                 fontFamily: 'var(--font-display)',
@@ -178,7 +287,7 @@ export function Step1BillType() {
                 transition: 'var(--transition)',
               }}
             >
-              Continue with {selectedProvider.shortName} →
+              Continue with {selectedBillType} →
             </button>
           </motion.div>
         )}
@@ -186,7 +295,8 @@ export function Step1BillType() {
 
 
         
-        {selectedProvider && (
+        {/* {selectedProvider && ( */}
+        {selectedBillType && providers.length > 0 && (
       <SecurityNote />
         )}
     </motion.div>

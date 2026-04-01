@@ -12,6 +12,9 @@ import { Input, Button, ToggleGroup } from '@/components/ui/primitives'
 import { QUICK_AMOUNTS } from '@/lib/data'
 import type { MeterType } from '@/types'
 import { SecurityNote } from '../ui/SecurityNote'
+import { BILL_OPTIONS, PROVIDERS_BY_BILL_TYPE } from '@/lib/data'
+import type { BillType } from '@/types'
+import React from 'react'
 
 const schema = z.object({
   meterNumber: z
@@ -37,20 +40,20 @@ const METER_TYPES: { value: MeterType; label: string }[] = [
 ]
 
 const sectionCard: React.CSSProperties = {
-  background: 'var(--surface)',
-  border: '1px solid var(--border)',
-  borderRadius: 'var(--radius-lg)',
-  padding: '20px',
+  // background: 'var(--surface)',
+  // border: '1px solid var(--border)',
+  // borderRadius: 'var(--radius-lg)',
+  // padding: '20px',
   display: 'flex',
   flexDirection: 'column',
   gap: '16px',
 }
 
 const sectionTitle: React.CSSProperties = {
-  fontSize: '11px',
+  fontSize: '12px',
   fontWeight: 600,
-  letterSpacing: '1.2px',
-  textTransform: 'uppercase',
+  letterSpacing: '0.5px',
+  textTransform: 'capitalize',
   color: 'var(--text-muted)',
   margin: '0',
 }
@@ -60,7 +63,9 @@ function formatNaira(n: number) {
 }
 
 export function Step2MeterDetails() {
-  const { selectedProvider, setMeterInfo, setAmountContact } = usePaymentStore()
+  const { setMeterInfo, setAmountContact } = usePaymentStore()
+  const { selectedBillType, selectedProvider, setProvider } = usePaymentStore()
+    const providers = selectedBillType ? (PROVIDERS_BY_BILL_TYPE[selectedBillType] ?? []) : []
 
   const [meterType, setMeterType] = useState<MeterType>('prepaid')
   const [lookedUp, setLookedUp] = useState<{ accountName: string; address: string } | null>(null)
@@ -70,6 +75,7 @@ export function Step2MeterDetails() {
   const amountValid = numAmount >= 500
 
   const { mutate: lookup, isPending: looking } = useMeterLookup()
+  const [verifying, setVerifying] = React.useState(false);
 
   const {
     register,
@@ -80,21 +86,44 @@ export function Step2MeterDetails() {
 
   const meterNumber = watch('meterNumber')
 
+  // function handleLookup() {
+  //   if (!meterNumber || meterNumber.length < 11) return
+  //   lookup(
+  //     { providerId: selectedProvider!.id, meterNumber, meterType },
+  //     {
+  //       onSuccess: (data) => {
+  //         setLookedUp({ accountName: data.accountName, address: data.address })
+  //         toast.success('Meter verified!')
+  //       },
+  //       onError: () => {
+  //         setLookedUp(null)
+  //         toast.error('Meter not found. Check the number and try again.')
+  //       },
+  //     }
+  //   )
+  // }
+
   function handleLookup() {
-    if (!meterNumber || meterNumber.length < 11) return
+    if (!meterNumber || meterNumber.length < 11) return;
+
+    setVerifying(true); // start loading
+
     lookup(
       { providerId: selectedProvider!.id, meterNumber, meterType },
       {
         onSuccess: (data) => {
-          setLookedUp({ accountName: data.accountName, address: data.address })
-          toast.success('Meter verified!')
+          setLookedUp({ accountName: data.accountName, address: data.address });
+          toast.success('Meter verified!');
         },
         onError: () => {
-          setLookedUp(null)
-          toast.error('Meter not found. Check the number and try again.')
+          setLookedUp(null);
+          toast.error('Meter not found. Check the number and try again.');
+        },
+        onSettled: () => {
+          setVerifying(false); // stop loading regardless of success/failure
         },
       }
-    )
+    );
   }
 
   function onSubmit(values: FormValues) {
@@ -121,7 +150,7 @@ export function Step2MeterDetails() {
     >
 
       {/* Provider banner */}
-      <div style={{
+      {/* <div style={{
         display: 'flex', alignItems: 'center', gap: '12px',
         padding: '12px 16px',
         background: 'rgba(0,200,83,0.06)',
@@ -135,21 +164,151 @@ export function Step2MeterDetails() {
           </div>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>{selectedProvider?.region}</div>
         </div>
-      </div>
+      </div> */}
 
       {/* ── Meter Details card ── */}
       <div style={sectionCard}>
         {/* <p style={sectionTitle}>Meter Details</p> */}
+            {/* Provider dropdown */}
+<div style={{ position: 'relative', width: '100%' }}>
+
+  
+          <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'capitalize', color: 'var(--text-muted)', marginBottom: '4px', letterSpacing: '0.5px' }}>
+            Select Distribution Company
+          </p>
+
+  {/* Selected state display — acts as the trigger */}
+  <div
+    style={{
+      display: 'flex', alignItems: 'center', gap: '12px',
+      padding: '0 14px',
+      height: '58px',
+      background: 'var(--surface2)',
+      border: `1.5px solid ${selectedProvider ? 'var(--blue-light)' : 'var(--border)'}`,
+      borderRadius: 'var(--radius-xs)',
+      cursor: 'pointer',
+      transition: 'var(--transition)',
+      boxShadow: selectedProvider ? '0 0 0 3px rgba(0,200,83,0.1)' : 'none',
+      position: 'relative',
+    }}
+  >
+    {selectedProvider ? (
+      <>
+        {/* Optional icon */}
+        <span style={{ fontSize: '18px', flexShrink: 0 }}>{selectedProvider.icon}</span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '14px', fontWeight: 700,
+            color: 'var(--blue-light)',
+            lineHeight: 1.2,
+          }}>
+            {selectedProvider.shortName}
+          </div>
+          <div style={{
+            fontSize: '11px',
+            color: 'var(--text-muted)',
+            marginTop: '2px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}>
+            {selectedProvider.region}
+          </div>
+        </div>
+        {/* Green check */}
+        <span style={{
+          width: 18, height: 18, borderRadius: '50%',
+          background: 'var(--blue-light)',
+          color: 'white', fontSize: '10px', fontWeight: 700,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0,
+        }}>✓</span>
+      </>
+    ) : (
+      <span style={{ fontSize: '14px', color: 'var(--text-faint)', fontFamily: 'var(--font-body)' }}>
+        Select your distribution company
+      </span>
+    )}
+
+    {/* Chevron */}
+    <svg
+      width="14" height="14" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+      style={{
+        position: 'absolute', right: '14px',
+        color: selectedProvider ? 'var(--blue-light)' : 'var(--text-faint)',
+        pointerEvents: 'none', flexShrink: 0,
+      }}
+    >
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+
+    {/* Native select — invisible, covers the entire div */}
+    <select
+      value={selectedProvider?.id ?? ''}
+      onChange={e => {
+        const found = providers.find(p => p.id === e.target.value)
+        if (found) setProvider(found)
+      }}
+      style={{
+        position: 'absolute', inset: 0,
+        opacity: 0,
+        width: '100%', height: '100%',
+        cursor: 'pointer',
+        // font-size >= 16px prevents iOS zoom on focus
+        fontSize: '16px',
+      }}
+    >
+      <option value="" disabled>Select option</option>
+      {providers.map(p => (
+        <option key={p.id} value={p.id}>
+          {p.shortName} - {p.region}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+          {/* <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
             Meter type
-          </span>
+          </span> */}
           <ToggleGroup options={METER_TYPES} value={meterType} onChange={setMeterType} />
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <Input
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          {/* <div className="input-group">
+  <div className="floating-input-wrapper">
+    <Zap size={15} className="input-icon-left" />
+
+    <input
+      type="text"
+      placeholder=" "
+      inputMode="numeric"
+      maxLength={13}
+      className={`floating-input ${errors.meterNumber ? 'error' : ''}`}
+      {...register('meterNumber', { onChange: () => setLookedUp(null) })}
+      required
+    />
+
+    <label className="floating-label">Meter Number</label>
+
+    <button
+      type="button"
+      className="verify-btn"
+      onClick={handleLookup}
+      disabled={!meterNumber || meterNumber.length < 11 || looking}
+    >
+      {looking ? '...' : 'Verify'}
+    </button>
+  </div>
+
+  {errors.meterNumber && (
+    <span className="error-text">{errors.meterNumber.message}</span>
+  )}
+</div> */}
+          {/* <Input
             label="Meter Number"
             placeholder="Enter 11-digit meter number"
             inputMode="numeric"
@@ -157,8 +316,56 @@ export function Step2MeterDetails() {
             startIcon={<Zap size={15} />}
             error={errors.meterNumber?.message}
             {...register('meterNumber', { onChange: () => setLookedUp(null) })}
-          />
-          <Button
+          /> */}
+          {/* <Input
+  label="Meter Number"
+  startIcon={<Zap size={16} />}
+            inputMode="numeric"
+            maxLength={13}
+  value={meterNumber}
+  // hint="Enter your 11-digit meter number"
+  error={errors.meterNumber?.message}
+  verifyButton={
+    <button type='button'
+      className="verify-btn"
+      onClick={handleLookup}
+      disabled={!meterNumber || meterNumber.length < 11}
+    >
+      Verify
+    </button>
+  }
+  {...register('meterNumber')}
+/> */}
+<Input
+  label="Meter Number"
+  inputMode="numeric"
+  startIcon={<Zap size={16} />}
+  maxLength={13}
+  value={meterNumber}
+  // hint="Enter your 11-digit meter number"
+  error={errors.meterNumber?.message}
+  {...register('meterNumber', { onChange: () => setLookedUp(null) })}
+  verifyButton={
+    <button
+      type="button"
+      className="verify-btn"
+      onClick={handleLookup}
+      disabled={!meterNumber || meterNumber.length < 11 || verifying}
+    >
+      {verifying ? 'Verifying…' : 'Verify'}
+    </button>
+  }
+/>
+          {/* <Input
+            label="Meter Number"
+            startIcon={<Zap size={15} />}
+            inputMode="numeric"
+            maxLength={13}
+            value={meterNumber}
+            verifyButton={<Button size="sm" onClick={handleLookup}>Verify</Button>}
+            {...register('meterNumber')}
+          /> */}
+          {/* <Button
             type="button"
             variant="secondary"
             size="sm"
@@ -168,7 +375,7 @@ export function Step2MeterDetails() {
             disabled={!meterNumber || meterNumber.length < 11}
           >
             Verify meter
-          </Button>
+          </Button> */}
 
           <AnimatePresence>
             {lookedUp && (
@@ -197,30 +404,48 @@ export function Step2MeterDetails() {
             <div style={{
               display: 'flex', alignItems: 'center', gap: '8px',
               fontSize: '12px', color: 'var(--gold)',
-              padding: '10px 14px',
-              background: 'rgba(255,213,79,0.06)',
-              border: '1px solid rgba(255,213,79,0.15)',
-              borderRadius: 'var(--radius-md)',
+              fontFamily: 'var(--font-display)',
+              // padding: '10px 14px',
+              // background: 'rgba(255,213,79,0.06)',
+              // border: '1px solid rgba(255,213,79,0.15)',
+              // borderRadius: 'var(--radius-md)',
             }}>
               <AlertCircle size={14} />
-              Meter not verified — double-check before proceeding.
+              Meter not verified; double-check before proceeding.
             </div>
           )}
         </div>
 
         <Input
           label="Phone Number"
-          placeholder="08012345678"
           inputMode="tel"
           maxLength={11}
-          prefix="📱"
+          startIcon="📱"
           hint="Token will be sent via SMS to this number"
           error={errors.phone?.message}
           {...register('phone')}
         />
+        {/* <Input label="Phone Number"
+          inputMode="tel"
+          maxLength={11}
+          startIcon="📱" 
+          hint="Token will be sent via SMS to this number"
+          error={errors.phone?.message}
+          {...register('phone')}
+        /> */}
 
         {/* Email — optional */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+
+        <Input
+          label="Email Address"
+          optional
+          startIcon="✉️"
+          hint="Receipt will be sent here"
+          error={errors.email?.message}
+          {...register('email')}
+        />
+
+        {/* <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '1.2px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
               Email Address
@@ -250,18 +475,24 @@ export function Step2MeterDetails() {
           </div>
           {errors.email && <span style={{ fontSize: '12px', color: 'var(--danger)' }}>{errors.email.message}</span>}
           <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Receipt will be sent here</span>
-        </div>
+        </div> */}
       </div>
 
       {/* ── Enter Amount card ── */}
       <div style={sectionCard}>
+        <div 
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px',
+          }}>
         <p style={sectionTitle}>Enter Amount</p>
 
         <div style={{ position: 'relative' }}>
           <span style={{
             position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)',
             fontFamily: 'var(--font-display)', fontWeight: 800,
-            fontSize: '20px', color: 'var(--green)', pointerEvents: 'none',
+            fontSize: '20px', color: 'var(--blue-light)', pointerEvents: 'none',
           }}>₦</span>
           <input
             type="number"
@@ -274,8 +505,8 @@ export function Step2MeterDetails() {
             style={{
               width: '100%',
               background: 'var(--surface2)',
-              border: `2px solid ${amountValid && amount ? 'var(--green)' : !amount ? 'var(--border)' : 'var(--danger)'}`,
-              borderRadius: 'var(--radius-lg)',
+              border: `2px solid ${amountValid && amount ? 'var(--blue-light)' : !amount ? 'var(--border)' : 'var(--danger)'}`,
+              borderRadius: 'var(--radius-xs)',
               padding: '13px 14px 13px 42px',
               color: 'var(--text)',
               fontFamily: 'var(--font-display)',
@@ -288,38 +519,29 @@ export function Step2MeterDetails() {
         </div>
 
         {amount && !amountValid && (
-          <span style={{ fontSize: '12px', color: 'var(--danger)', marginTop: '-8px' }}>
+          <span style={{ fontSize: '10px', color: 'var(--danger)', marginTop: '0px' }}>
             Minimum amount is ₦500
           </span>
         )}
-
-        {/* Quick amounts */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-          {QUICK_AMOUNTS.map(qa => (
-            <motion.button
-              key={qa}
-              type="button"
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setAmount(String(qa))}
-              style={{
-                padding: '8px 14px',
-                background: numAmount === qa ? 'rgba(0,200,83,0.1)' : 'var(--surface2)',
-                border: `1px solid ${numAmount === qa ? 'var(--green)' : 'var(--border)'}`,
-                borderRadius: 'var(--radius-sm)',
-                color: numAmount === qa ? 'var(--green)' : 'var(--text-muted)',
-                fontSize: '13px', fontWeight: 600,
-                fontFamily: 'var(--font-display)',
-                cursor: 'pointer', outline: 'none',
-                transition: 'var(--transition)',
-              }}
-            >
-              {formatNaira(qa).replace('.00', '')}
-            </motion.button>
-          ))}
         </div>
 
+        {/* Quick amounts */}
+        <div className="quick-amounts">
+  {QUICK_AMOUNTS.map((qa) => (
+    <motion.button
+      key={qa}
+      type="button"
+      whileTap={{ scale: 0.95 }}
+      onClick={() => setAmount(String(qa))}
+      className={`quick-amount-btn ${numAmount === qa ? 'active' : ''}`}
+    >
+      {formatNaira(qa).replace('.00', '')}
+    </motion.button>
+  ))}
+</div>
+
         {/* Live total summary */}
-        <AnimatePresence>
+        {/* <AnimatePresence>
           {amountValid && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
@@ -342,7 +564,7 @@ export function Step2MeterDetails() {
               </span>
             </motion.div>
           )}
-        </AnimatePresence>
+        </AnimatePresence> */}
       </div>
 
       {/* Continue */}
@@ -355,9 +577,9 @@ export function Step2MeterDetails() {
         disabled={!amountValid}
         style={{
           width: '100%',
-          background: 'linear-gradient(135deg, var(--green) 0%, var(--naija) 100%)',
+          background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
           border: 'none',
-          borderRadius: 'var(--radius-md)',
+          borderRadius: 'var(--radius-xs)',
           padding: '16px',
           color: 'white',
           fontFamily: 'var(--font-display)',
