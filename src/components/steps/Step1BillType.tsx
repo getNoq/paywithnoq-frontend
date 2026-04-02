@@ -18,11 +18,11 @@ export function Step1BillType() {
   const providers = selectedBillType ? (PROVIDERS_BY_BILL_TYPE[selectedBillType] ?? []) : []
 
   return (
-    <motion.div variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+    <motion.div variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
       {/* Bill type grid */}
       <motion.div variants={fadeUp}>
-        <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '4px', letterSpacing: '0.5px' }}>
+        <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px', letterSpacing: '0.5px' }}>
           What would you like to pay?
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
@@ -37,23 +37,25 @@ export function Step1BillType() {
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
                   padding: '16px 10px',
-                  background: isSelected ? 'var(--surface)' : 'var(--surface)',
-                  border: `1px solid ${isSelected ? 'var(--green)' : 'var(--border)'}`,
+                  background: isSelected ? 'var(--primary)' : opt.available ? '#F0FAF8' : '#F5F5F5 ',
+                  border: `1px solid ${isSelected ? 'var(--primary)' : opt.available ? 'rgba(0, 95, 86, 0.2)' : '#E5E7EB'}`,
                   borderRadius: 'var(--radius-xs)',
                   cursor: opt.available ? 'pointer' : 'not-allowed',
-                  opacity: opt.available ? 1 : 0.4,
+                  opacity: opt.available ? 1 : 1,
                   transition: 'var(--transition)',
-                  boxShadow: isSelected ? '0 0 0 1px var(--blue-light), 0 4px 20px rgba(0,200,83,0.1)' : 'none',
+                  boxShadow: isSelected ? '0 0 0 1px var(--primary), 0 4px 20px rgba(0,200,83,0.1)' : opt.available ? '0 0 0 1px rgba(0, 95, 86, 0.2)' : 'none',
                   outline: 'none',
                   position: 'relative',
+                  justifyContent: 'center',
                 }}
               >
                 {!opt.available && (
                   <span style={{
                     position: 'absolute', top: '6px', right: '6px',
                     fontSize: '9px', fontWeight: 600, letterSpacing: '0.5px',
-                    background: 'var(--surface3)', color: 'var(--text-faint)',
+                    background: 'var(--surface2)', color: 'var(--text-faint)',
                     padding: '2px 5px', borderRadius: '4px',
+                    opacity: 0.4,
                   }}>
                     SOON
                   </span>
@@ -64,8 +66,8 @@ export function Step1BillType() {
                   <span style={{
                     position: 'absolute', top: '6px', right: '6px',
           width: 18, height: 18, borderRadius: '50%',
-          background: 'var(--blue-light)',
-          color: 'white', fontSize: '10px', fontWeight: 700,
+          background: 'var(--white)',
+          color: 'var(--primary)', fontSize: '10px', fontWeight: 700,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0,
                   }}>
@@ -74,9 +76,12 @@ export function Step1BillType() {
                 )}
                 <span style={{ fontSize: '24px' }}>{opt.icon}</span>
                 <span style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '12px', fontWeight: 700,
-                  color: isSelected ? 'var(--blue-light)' : 'var(--text)',
+                  fontFamily: isSelected ? 'var(--font-medium)' : 'var(--font-medium)',
+                  fontSize: '12px',
+                  fontWeight: isSelected ? 600 : 400,
+                  color: isSelected ? 'var(--white)' : opt.available ? '#005F56' : '#9CA3AF ',
+                  letterSpacing: '0.5px',
+                  lineHeight: '14px'
                 }}>
                   {opt.label}
                 </span>
@@ -274,20 +279,22 @@ export function Step1BillType() {
               onClick={() => usePaymentStore.getState().setStep(2)}
               style={{
                 width: '100%',
-                background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
+                // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
+                background: 'var(--black)',
                 border: 'none',
                 borderRadius: 'var(--radius-xs)',
                 padding: '16px',
-                color: 'white',
-                fontFamily: 'var(--font-display)',
-                fontWeight: 700,
+                color: 'var(--white)',
+                fontFamily: 'var(--font-semibold)',
+                // fontWeight: 700,
                 fontSize: '16px',
                 cursor: 'pointer',
-                boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
+                // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
                 transition: 'var(--transition)',
+                letterSpacing: '1px',
               }}
             >
-              Continue with {selectedBillType} →
+              Continue with {selectedBillType}
             </button>
           </motion.div>
         )}

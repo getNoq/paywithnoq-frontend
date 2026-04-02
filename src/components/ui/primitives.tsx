@@ -237,7 +237,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const borderColor = error
       ? 'var(--danger)'
       : isFocused
-      ? 'var(--blue-light)'
+      ? 'var(--primary)'
       : 'var(--border)'
  
     // ── Handlers that compose with spread props ────────────────────────────
@@ -302,7 +302,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               border: `1.5px solid ${borderColor}`,
               fontSize: '15px',
               outline: 'none',
-              background: 'var(--surface2)',
+              background: '#F3F3F3',
               color: 'var(--text)',
               fontFamily: 'var(--font-body)',
               transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
@@ -329,7 +329,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 letterSpacing: labelFloated ? '0.5px' : '0',
                 color: labelFloated
                   ? isFocused
-                    ? error ? 'var(--danger)' : 'var(--blue-light)'
+                    ? error ? 'var(--danger)' : 'var(--primary)'
                     : error ? 'var(--danger)' : 'var(--text-muted)'
                   : 'var(--text-faint)',
                 pointerEvents: 'none',
@@ -348,7 +348,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                   letterSpacing: '0.5px',
                   textTransform: 'uppercase',
                   color: 'var(--text-faint)',
-                  background: 'var(--surface3)',
+                  background: 'var(--surface2)',
                   padding: '1px 5px',
                   borderRadius: '3px',
                   verticalAlign: 'middle',
@@ -499,7 +499,7 @@ export function ToggleGroup<T extends string>({ options, value, onChange }: Togg
       display: 'grid',
       gridTemplateColumns: `repeat(${options.length}, 1fr)`,
       gap: '6px',
-      background: 'var(--surface2)',
+      background: '#F0FAF8',
       border: '1.5px solid var(--border)',
       borderRadius: 'var(--radius-sm)',
       padding: '4px',
@@ -513,15 +513,16 @@ export function ToggleGroup<T extends string>({ options, value, onChange }: Togg
             padding: '12px',
             border: 'none',
             borderRadius: 'var(--radius-xs)',
-            // background: value === opt.value ? 'var(--surface3)' : 'transparent',
-            background: value === opt.value ? 'linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%)' : 'transparent',
-            color: value === opt.value ? 'var(--white)' : 'var(--white)',
-            fontFamily: 'var(--font-body)',
+            background: value === opt.value ? 'var(--primary)' : 'transparent',
+            // background: value === opt.value ? 'linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%)' : 'transparent',
+            color: value === opt.value ? 'var(--white)' : 'var(--primary)',
+            fontFamily: 'var(--font-semibold)',
             fontWeight: 500,
             fontSize: '13px',
             cursor: 'pointer',
             transition: 'var(--transition)',
             outline: 'none',
+            textTransform: 'uppercase',
             boxShadow: value === opt.value ? '0 0 0 1px var(--border-hover)' : 'none',
           }}
         >

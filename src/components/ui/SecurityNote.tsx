@@ -13,10 +13,11 @@ export const SecurityNote = () => {
         justifyContent: 'center',
         gap: '6px',
         fontSize: '12px',
-        color: 'var(--muted)',
+        color: 'var(--text)',
         textAlign: 'center',
         flexWrap: 'wrap',
-        lineHeight: '14px'
+        lineHeight: '14px',
+        fontFamily: 'var(--font-medium)',
       }}
     >
       {items.map((item, index) => (

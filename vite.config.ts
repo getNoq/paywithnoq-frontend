@@ -17,7 +17,7 @@ export default defineConfig({
       },
     },
     allowedHosts: [
-      'php-patrol-technique-advise.trycloudflare.com'
+      'acrylic-relevance-coaching-keno.trycloudflare.com'
     ],
   },
 })
