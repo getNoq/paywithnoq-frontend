@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
 @font-face {
   font-family: 'FuturaMDBold';
@@ -7,6 +8,49 @@
   font-weight: bold;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'GreatMango';
+  src: url('/fonts/great_mango/GreatMango.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DelaGothicOne';
+  src: url('/fonts/others/DelaGothicOne-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ClashDisplay-Bold';
+  src: url('/fonts/others/ClashDisplay-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ClashDisplay-Regular';
+  src: url('/fonts/others/ClashDisplay-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ClashDisplay-Medium';
+  src: url('/fonts/others/ClashDisplay-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ClashDisplay-Semibold';
+  src: url('/fonts/others/ClashDisplay-Semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
 
 @font-face {
   font-family: 'Effra';
@@ -24,6 +68,11 @@
 
 /* ─── Tokens ─────────────────────────────────────────────────────────────── */
 :root {
+  /* --primary:       #EA580C; */
+  --primary:       #005F56;
+  --secondary:        #3B82F6;
+  --light:        #00FF89;
+  /* --secondary:        #005F56; */
   /* --green:        #00c853; */
   --green:        #3B82F6;
   --green-mid:    #009624;
@@ -37,18 +86,23 @@
   --naija:        #008751;
   --bg:           #090d0c;
   --surface:      #111618;
-  --surface2:     #1B1D1E;
+  --surface2:     #b1b1b1;
   --surface3:     #1e2b22;
-  --border:       #333333;
+  --border:       #EDEDED;
   --border-hover: rgba(0, 200, 83, 0.28);
-  --text:         #dff0e4;
+  --text:         #525252;
+  --text-title:   #0a0a0a;
   --text-muted:   #8d8d8d;
   --text-faint:   #636363;
   --white:        #ffffff;
+  --white-warm:   #F5F5F0;
+  --white-cool:   #F7F9F8;
+  --black:        #000000;
   --danger:       #ff5252;
   --danger-bg:    rgba(255, 82, 82, 0.08);
   --gold:         #ffd54f;
   --gold-bg:      rgba(255, 213, 79, 0.08);
+  --input-bg:      #F3F3F3; 
 
   --radius-xs:   4px;
   --radius-sm:   8px;
@@ -57,9 +111,15 @@
   --radius-xl:   24px;
 
   /* --font-display: 'FuturaMDBold', sans-serif; */
-  --font-display: 'Syne', sans-serif;
-  --font-body: 'Effra', sans-serif;
-  --font-body-bold: 'EffraBd', sans-serif;
+  /* --font-display: 'Syne', sans-serif; */
+  --font-display: 'ClashDisplay-Bold', sans-serif;
+  /* --font-display: "Plus Jakarta Sans", sans-serif; */
+  /* --font-body: 'Effra', sans-serif; */
+  /* --font-body: 'Inter', sans-serif;
+  --font-body-bold: 'EffraBd', sans-serif; */
+  --font-body: 'ClashDisplay-Regular', sans-serif;
+  --font-medium: 'ClashDisplay-Medium', sans-serif;
+  --font-semibold: 'ClashDisplay-Semibold', sans-serif;
   /* --font-body:    'DM Sans', sans-serif; */
 
   --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -77,7 +137,8 @@ html { font-size: 16px; -webkit-font-smoothing: antialiased; }
 body {
   font-family: var(--font-body);
   /* No solid bg — the AdBackground component provides the background */
-  background: var(--bg);
+  /* background: var(--bg); */
+  background: var(--white-cool);
   color: var(--text);
   min-height: 100vh;
   line-height: 1.5;
@@ -149,15 +210,26 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* 👈 move upward on mobile */
-  padding: 110px 0 80px; /* slightly more top breathing room */
+  /* justify-content: flex-start; /* 👈 move upward on mobile */
+  justify-content: flex-start;
+  padding: 100px 0 80px; /* slightly more top breathing room */
   position: relative;
   z-index: 1;
   overflow: hidden;
+  background: var(--white-warm);
 }
 
 .amount-input {
   font-size: 28px !important;
+}
+
+.app-title { 
+  font-family: var(--font-semibold);
+  font-size: 24px; 
+  color: var(--text-title);
+  text-align: center;
+  margin-bottom: 2px;
+  line-height: 32px; 
 }
 
 /* Fixed header */
@@ -176,7 +248,9 @@ textarea {
 
   z-index: 100;
 
-  background: rgba(9, 13, 12, 0.85);
+  /* background: rgba(9, 13, 12, 0.85); */
+  border-bottom: 1px solid #EDEDED;
+  background: #111111 ;
   backdrop-filter: blur(10px);
 }
 
@@ -185,11 +259,12 @@ textarea {
   width: 90%;
   max-width: 520px;
   height: auto;
-  max-height: 60vh;
+  max-height: 65vh;
   position: fixed;
 
   border-radius: 8px;
-  background-color: #222;
+  background-color: #FFF;
+  border: 1.5px solid #EDEDED;
 
   display: flex;
   flex-direction: column;
@@ -198,7 +273,7 @@ textarea {
 
 /* Scrollable content */
 .app-main-content {
-  padding: 24px;
+  padding: 16px;
   overflow-y: auto;
   flex: 1;
 }
@@ -208,6 +283,9 @@ textarea {
   .app-main {
     width: 100%;
     max-height: 70vh;
+  }
+  .app-main-content {
+    padding: 24px;
   }
   .app-container {
     justify-content: center;
@@ -331,23 +409,23 @@ textarea {
   flex: 1 1 22%; /* default: 4 per row on desktop, with spacing */
   max-width: 22%;
   padding: 8px 14px;
-  border: 1.5px solid var(--border);
+  border: 1.5px solid #E5E7EB;
   border-radius: var(--radius-xs);
-  background-color: var(--surface2);
+  background-color: #F5F5F5;
   font-size: 13px;
   font-weight: 600;
   font-family: var(--font-display);
   cursor: pointer;
   outline: none;
   transition: var(--transition);
-  color: var(--text-muted);
+  color: #9CA3AF;
 }
 
 /* Active / selected style (optional) */
 .quick-amount-btn.active {
-  border: 1.5px solid var(--blue-light);
-  background: var(--surface2);
-  color: var(--blue-light);
+  border: 1.5px solid var(--primary);
+  background: var(--primary);
+  color: var(--white);
 }
 
 /* Responsive: 2 per row on mobile */
@@ -355,5 +433,10 @@ textarea {
   .quick-amount-btn {
     flex: 1 1 48%;
     max-width: 48%;
+  }
+  .app-title {
+    font-family: var(--font-semibold);
+    font-size: 20px;
+    line-height: 28px;
   }
 }

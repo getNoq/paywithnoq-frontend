@@ -183,8 +183,8 @@ export function Step2MeterDetails() {
       display: 'flex', alignItems: 'center', gap: '12px',
       padding: '0 14px',
       height: '58px',
-      background: 'var(--surface2)',
-      border: `1.5px solid ${selectedProvider ? 'var(--blue-light)' : 'var(--border)'}`,
+      background: '#f3f3f3',
+      border: `1.5px solid ${selectedProvider ? 'var(--primary)' : 'var(--border)'}`,
       borderRadius: 'var(--radius-xs)',
       cursor: 'pointer',
       transition: 'var(--transition)',
@@ -200,14 +200,14 @@ export function Step2MeterDetails() {
           <div style={{
             fontFamily: 'var(--font-display)',
             fontSize: '14px', fontWeight: 700,
-            color: 'var(--blue-light)',
+            color: 'var(--primary)',
             lineHeight: 1.2,
           }}>
             {selectedProvider.shortName}
           </div>
           <div style={{
             fontSize: '11px',
-            color: 'var(--text-muted)',
+            color: 'var(--black)',
             marginTop: '2px',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
@@ -219,7 +219,7 @@ export function Step2MeterDetails() {
         {/* Green check */}
         <span style={{
           width: 18, height: 18, borderRadius: '50%',
-          background: 'var(--blue-light)',
+          background: 'var(--primary)',
           color: 'white', fontSize: '10px', fontWeight: 700,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           flexShrink: 0,
@@ -237,7 +237,7 @@ export function Step2MeterDetails() {
       stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
       style={{
         position: 'absolute', right: '14px',
-        color: selectedProvider ? 'var(--blue-light)' : 'var(--text-faint)',
+        color: selectedProvider ? 'var(--primary)' : 'var(--text-faint)',
         pointerEvents: 'none', flexShrink: 0,
       }}
     >
@@ -492,7 +492,7 @@ export function Step2MeterDetails() {
           <span style={{
             position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)',
             fontFamily: 'var(--font-display)', fontWeight: 800,
-            fontSize: '20px', color: 'var(--blue-light)', pointerEvents: 'none',
+            fontSize: '20px', color: 'var(--primary)', pointerEvents: 'none',
           }}>₦</span>
           <input
             type="number"
@@ -504,16 +504,16 @@ export function Step2MeterDetails() {
             className='amount-input '
             style={{
               width: '100%',
-              background: 'var(--surface2)',
-              border: `2px solid ${amountValid && amount ? 'var(--blue-light)' : !amount ? 'var(--border)' : 'var(--danger)'}`,
+              background: 'var(--input-bg)',
+              border: `2px solid ${amountValid && amount ? 'var(--primary)' : !amount ? 'var(--border)' : 'var(--danger)'}`,
               borderRadius: 'var(--radius-xs)',
               padding: '13px 14px 13px 42px',
-              color: 'var(--text)',
+              color: 'var(--primary)',
               fontFamily: 'var(--font-display)',
               fontWeight: 800,
               outline: 'none',
               transition: 'var(--transition)',
-              boxShadow: amountValid && amount ? '0 0 0 4px rgba(0,200,83,0.08)' : 'none',
+              // boxShadow: amountValid && amount ? '0 0 0 4px rgba(0,200,83,0.08)' : 'none',
             }}
           />
         </div>
@@ -527,18 +527,18 @@ export function Step2MeterDetails() {
 
         {/* Quick amounts */}
         <div className="quick-amounts">
-  {QUICK_AMOUNTS.map((qa) => (
-    <motion.button
-      key={qa}
-      type="button"
-      whileTap={{ scale: 0.95 }}
-      onClick={() => setAmount(String(qa))}
-      className={`quick-amount-btn ${numAmount === qa ? 'active' : ''}`}
-    >
-      {formatNaira(qa).replace('.00', '')}
-    </motion.button>
-  ))}
-</div>
+          {QUICK_AMOUNTS.map((qa) => (
+            <motion.button
+              key={qa}
+              type="button"
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setAmount(String(qa))}
+              className={`quick-amount-btn ${numAmount === qa ? 'active' : ''}`}
+            >
+              {formatNaira(qa).replace('.00', '')}
+            </motion.button>
+          ))}
+        </div>
 
         {/* Live total summary */}
         {/* <AnimatePresence>
@@ -577,16 +577,17 @@ export function Step2MeterDetails() {
         disabled={!amountValid}
         style={{
           width: '100%',
-          background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
+          // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
+          background: 'var(--black)',
           border: 'none',
           borderRadius: 'var(--radius-xs)',
           padding: '16px',
           color: 'white',
-          fontFamily: 'var(--font-display)',
+          fontFamily: 'var(--font-semibold)',
           fontWeight: 700,
           fontSize: '16px',
           cursor: 'pointer',
-          boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
+          // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
           transition: 'var(--transition)',
         }}
       >

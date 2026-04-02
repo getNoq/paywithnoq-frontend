@@ -34,7 +34,7 @@ function StepHeading() {
   const { step, selectedBillType, currentTransaction } = usePaymentStore()
   if (currentTransaction) return null
   const headings: Record<number, { title: string; sub: string }> = {
-    1: { title: 'Pay Your Bills Instantly with Noq', sub: selectedBillType ? '' : '' },
+    1: { title: 'Pay your bills instantly with noq', sub: selectedBillType ? '' : '' },
     // 1: { title: 'New Payment', sub: selectedBillType ? '' : '' },
     // 2: { title: 'Payment Details', sub: selectedBillType ? `Pay your ${billTypeLabels[selectedBillType]} bill instantly` : '' },
     2: { title: 'Payment Details', sub: selectedBillType ? '' : '' },
@@ -44,7 +44,7 @@ function StepHeading() {
   const h = headings[step]
   return (
     <div style={{ marginBottom: '16px' }}>
-      <h1 style={{ fontSize: '24px', color: 'var(--white)', marginBottom: '2px', lineHeight: '32px' }}>{h.title}</h1>
+      <h1 className='app-title'>{h.title}</h1>
       {h.sub && <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>{h.sub}</p>}
     </div>
   )
@@ -72,7 +72,7 @@ export function AppLayout() {
   return (
     <>
       {/* Ad background — sits behind everything */}
-      <AdBackground />
+      {/* <AdBackground /> */}
 
       {/* <div style={{
         minHeight: '100vh',
@@ -119,16 +119,17 @@ export function AppLayout() {
         <header className="app-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-              <div style={{
+              {/* <div style={{
                 width: 36, height: 36,
                 background: 'linear-gradient(135deg, var(--green), var(--naija))',
                 borderRadius: '10px',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: '18px',
                 boxShadow: '0 0 16px rgba(0,200,83,0.25)',
-              }}>⚡</div>
-              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '24px', color: 'var(--white)' }}>
-                PayWith<span style={{ color: 'var(--green)' }}>Noq</span>
+              }}>⚡</div> */}
+              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '32px', lineHeight: '32px', color: 'var(--white)' }}>
+                {/* PayWith */}
+                <span style={{ color: 'var(--white)' }}>NOQ</span>
               </span>
             </div>
           </div>
@@ -169,7 +170,8 @@ export function AppLayout() {
             <>
                 <div style={{
                   display: 'flex',
-                  gap: '16px'
+                  gap: '16px',
+                  justifyContent: 'center',
                 }}>
               {step > 1 && !currentTransaction && (
                 <button
@@ -219,19 +221,19 @@ export function AppLayout() {
           display: 'flex', justifyContent: 'center',
           padding: '0 20px 24px',
           // background: 'linear-gradient(to top, rgba(9,13,12,0.97) 60%, transparent)',
-          background: 'linear-gradient(to top, #222 20%, transparent)',
+          background: 'var(--white-warm)',
           zIndex: 50,
         }}>
           <div style={{
             display: 'flex',
-            background: 'rgba(17, 24, 21, 0.8)',
+            background: 'var(--white)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid var(--border)',
+            border: '1.5px solid var(--border)',
             borderRadius: 'var(--radius-xl)',
             padding: '6px',
             gap: '4px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+            // boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
           }}>
             {NAV.map(({ id, icon: Icon, label }) => {
               const active = tab === id
@@ -245,14 +247,14 @@ export function AppLayout() {
                     borderRadius: 'var(--radius-lg)',
                     border: 'none',
                     background: active ? 'var(--surface)' : 'transparent',
-                    color: active ? 'var(--blue-light)' : 'var(--text-muted)',
-                    fontFamily: 'var(--font-display)',
+                    color: active ? 'var(--white)' : 'var(--text-muted)',
+                    fontFamily: 'var(--font-semibold)',
                     fontWeight: active ? 700 : 500,
                     fontSize: '14px',
                     cursor: 'pointer',
                     transition: 'var(--transition)',
                     outline: 'none',
-                    boxShadow: active ? '0 0 0 1px var(--blue-light)' : 'none',
+                    boxShadow: active ? '0 0 0 1px var(--white)' : 'none',
                   }}
                 >
                   <Icon size={16} />
