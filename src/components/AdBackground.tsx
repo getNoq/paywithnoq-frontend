@@ -177,7 +177,8 @@ export function AdBackground({ ads }: AdBackgroundProps) {
         //     radial-gradient(ellipse at center, rgba(9,13,12,${opacity - 0.08}) 0%, rgba(9,13,12,${opacity}) 100%)
         //   `,
           background: 'radial-gradient(rgba(9, 13, 12, 0.50) 0%, rgba(9, 13, 12, 0.35) 100%) rgba(9, 13, 12, 0.35)'
-        }}
+        // background: 'var(--white-cool)',
+      }}
       />
 
       {/* ── Ad badge — bottom left, above nav ── */}
