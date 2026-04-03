@@ -35,7 +35,8 @@ function StepHeading() {
   const { step, selectedBillType, currentTransaction } = usePaymentStore()
   if (currentTransaction) return null
   const headings: Record<number, { title: string; sub: string }> = {
-    1: { title: 'Pay your bills instantly with noq', sub: selectedBillType ? '' : '' },
+    // 1: { title: 'Pay your bills instantly with noq', sub: selectedBillType ? '' : '' },
+    1: { title: '', sub: selectedBillType ? '' : '' },
     // 1: { title: 'New Payment', sub: selectedBillType ? '' : '' },
     // 2: { title: 'Payment Details', sub: selectedBillType ? `Pay your ${billTypeLabels[selectedBillType]} bill instantly` : '' },
     2: { title: 'Payment Details', sub: selectedBillType ? '' : '' },
@@ -119,32 +120,47 @@ export function AppLayout() {
           backdropFilter: 'blur(10px)',
         }}> */}
         <header className="app-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-              {/* <div style={{
-                width: 36, height: 36,
-                background: 'linear-gradient(135deg, var(--green), var(--naija))',
-                borderRadius: '10px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '18px',
-                boxShadow: '0 0 16px rgba(0,200,83,0.25)',
-              }}>⚡</div> */}
-              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '32px', lineHeight: '32px', color: 'var(--white)' }}>
-                {/* PayWith */}
-                <span style={{ color: 'var(--white)' }}>NOQ</span>
-              </span>
+          <div style={{ display: 'flex', width: '100%', maxWidth: '1280px', justifyContent: 'space-between', alignItems: 'center', margin: '0 auto', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+                {/* <div style={{
+                  width: 36, height: 36,
+                  background: 'linear-gradient(135deg, var(--green), var(--naija))',
+                  borderRadius: '10px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '18px',
+                  boxShadow: '0 0 16px rgba(0,200,83,0.25)',
+                }}>⚡</div> */}
+                <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '28px', lineHeight: '28px', color: 'var(--white)' }}>
+                  {/* PayWith */}
+                  <span style={{ color: 'var(--white)' }}>NOQ</span>
+                </span>
+              </div>
             </div>
-          </div>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: '6px',
-            background: 'rgba(23, 32, 25, 0.7)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            border: '1px solid var(--border)',
-            borderRadius: '20px', padding: '4px 12px',
-            fontSize: '12px', color: 'var(--text-muted)',
-          }}>
-            🇳🇬 Nigeria
+            {/* <div style={{
+              display: 'flex', alignItems: 'center', gap: '6px',
+              background: 'rgba(23, 32, 25, 0.7)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              border: '1px solid var(--border)',
+              borderRadius: '20px', padding: '4px 12px',
+              fontSize: '12px', color: 'var(--text-muted)',
+            }}>
+              🇳🇬 Nigeria
+            </div> */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '6px',
+              background: 'white',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              border: '1px solid var(--border)',
+              borderRadius: '100px', padding: '8px 16px',
+              fontSize: '14px', color: 'var(--black)',
+              fontWeight: 500,
+              cursor: 'pointer',
+            }}>
+              Sign up
+            </div>
           </div>
         </header>
 

@@ -17,7 +17,7 @@ export default defineConfig({
       },
     },
     allowedHosts: [
-      'paragraph-mineral-harris-properly.trycloudflare.com'
+      'hierarchy-mime-arnold-notices.trycloudflare.com'
     ],
   },
 })

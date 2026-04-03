@@ -209,12 +209,13 @@ export function Step2MeterDetails() {
             {selectedProvider.shortName}
           </div>
           <div style={{
-            fontSize: '11px',
-            color: 'var(--black)',
+            fontSize: '12px',
+            color: 'var(--text)',
             marginTop: '2px',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
+            fontWeight: 600,
           }}>
             {selectedProvider.region}
           </div>
@@ -587,7 +588,7 @@ export function Step2MeterDetails() {
           padding: '16px',
           color: '#f5f5f0',
           fontFamily: 'var(--font-medium)',
-          // fontWeight: 700,
+          fontWeight: 700,
           fontSize: '16px',
           cursor: 'pointer',
           // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
