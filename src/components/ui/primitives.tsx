@@ -268,7 +268,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               left: '13px',
               top: '50%',
               transform: 'translateY(-50%)',
-              color: isFocused ? 'var(--green)' : error ? 'var(--danger)' : 'var(--text-muted)',
+              color: isFocused ? 'var(--primary)' : error ? 'var(--danger)' : 'var(--text-muted)',
               display: 'flex',
               alignItems: 'center',
               pointerEvents: 'none',
@@ -293,7 +293,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             placeholder=" "
             style={{
               width: '100%',
-              height: '58px',
+              height: '56px',
               paddingTop: label ? '20px' : '0',      // room for floated label
               paddingBottom: label ? '6px' : '0',
               paddingLeft,
@@ -303,8 +303,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               fontSize: '15px',
               outline: 'none',
               background: '#F3F3F3',
-              color: 'var(--text)',
-              fontFamily: 'var(--font-body)',
+              color: 'var(--text-title)',
+              fontFamily: 'var(--font-medium)',
               transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
               boxShadow: isFocused
                 ? `0 0 0 3px ${error ? 'rgba(255,82,82,0.1)' : 'rgba(0,200,83,0.1)'}`
@@ -326,12 +326,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 transform: labelFloated ? 'none' : 'translateY(-50%)',
                 fontSize: labelFloated ? '10px' : '15px',
                 fontWeight: labelFloated ? 500 : 400,
+                fontFamily: labelFloated ? 'var(--font-medium)' : 'var(--font-body)',
                 letterSpacing: labelFloated ? '0.5px' : '0',
                 color: labelFloated
                   ? isFocused
                     ? error ? 'var(--danger)' : 'var(--primary)'
                     : error ? 'var(--danger)' : 'var(--text-muted)'
-                  : 'var(--text-faint)',
+                  : 'var(--text-muted)',
                 pointerEvents: 'none',
                 transition: 'all 0.18s cubic-bezier(0.4, 0, 0.2, 1)',
                 whiteSpace: 'nowrap',
@@ -347,8 +348,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                   fontWeight: 500,
                   letterSpacing: '0.5px',
                   textTransform: 'uppercase',
-                  color: 'var(--text-faint)',
-                  background: 'var(--surface2)',
+                  color: 'var(--white)',
+                  background: 'var(--text-muted)',
                   padding: '1px 5px',
                   borderRadius: '3px',
                   verticalAlign: 'middle',
@@ -395,7 +396,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ) : hint ? (
           <span style={{
             fontSize: '11px',
-            color: 'var(--text-muted)',
+            color: 'var(--text)',
+            fontWeight: 600,
             paddingLeft: '2px',
           }}>
             {hint}
@@ -502,7 +504,7 @@ export function ToggleGroup<T extends string>({ options, value, onChange }: Togg
       background: '#F0FAF8',
       border: '1.5px solid var(--border)',
       borderRadius: 'var(--radius-sm)',
-      padding: '4px',
+      padding: '2px',
     }}>
       {options.map(opt => (
         <button
@@ -518,12 +520,13 @@ export function ToggleGroup<T extends string>({ options, value, onChange }: Togg
             color: value === opt.value ? 'var(--white)' : 'var(--primary)',
             fontFamily: 'var(--font-semibold)',
             fontWeight: 500,
-            fontSize: '13px',
+            fontSize: '12px',
             cursor: 'pointer',
             transition: 'var(--transition)',
             outline: 'none',
             textTransform: 'uppercase',
-            boxShadow: value === opt.value ? '0 0 0 1px var(--border-hover)' : 'none',
+            letterSpacing: '0.5px',
+            // boxShadow: value === opt.value ? '0 0 0 1px var(--border-hover)' : 'none',
           }}
         >
           {opt.label}

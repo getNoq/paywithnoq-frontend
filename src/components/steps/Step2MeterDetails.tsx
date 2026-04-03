@@ -15,6 +15,7 @@ import { SecurityNote } from '../ui/SecurityNote'
 import { BILL_OPTIONS, PROVIDERS_BY_BILL_TYPE } from '@/lib/data'
 import type { BillType } from '@/types'
 import React from 'react'
+import { useMediaQuery } from 'react-responsive'
 
 const schema = z.object({
   meterNumber: z
@@ -46,15 +47,16 @@ const sectionCard: React.CSSProperties = {
   // padding: '20px',
   display: 'flex',
   flexDirection: 'column',
-  gap: '16px',
+  gap: '12px',
 }
 
 const sectionTitle: React.CSSProperties = {
   fontSize: '12px',
+  fontFamily: 'var(--font-medium)',
   fontWeight: 600,
   letterSpacing: '0.5px',
   textTransform: 'capitalize',
-  color: 'var(--text-muted)',
+  color: 'var(--text)',
   margin: '0',
 }
 
@@ -66,6 +68,7 @@ export function Step2MeterDetails() {
   const { setMeterInfo, setAmountContact } = usePaymentStore()
   const { selectedBillType, selectedProvider, setProvider } = usePaymentStore()
     const providers = selectedBillType ? (PROVIDERS_BY_BILL_TYPE[selectedBillType] ?? []) : []
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   const [meterType, setMeterType] = useState<MeterType>('prepaid')
   const [lookedUp, setLookedUp] = useState<{ accountName: string; address: string } | null>(null)
@@ -146,7 +149,7 @@ export function Step2MeterDetails() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
       onSubmit={handleSubmit(onSubmit)}
-      style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+      style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
     >
 
       {/* Provider banner */}
@@ -173,7 +176,7 @@ export function Step2MeterDetails() {
 <div style={{ position: 'relative', width: '100%' }}>
 
   
-          <p style={{ fontSize: '12px', fontWeight: 600, textTransform: 'capitalize', color: 'var(--text-muted)', marginBottom: '4px', letterSpacing: '0.5px' }}>
+          <p style={{ fontSize: '12px', fontFamily: 'var(--font-medium)', fontWeight: 600, textTransform: 'capitalize', color: 'var(--text)', marginBottom: '4px', letterSpacing: '0.5px' }}>
             Select Distribution Company
           </p>
 
@@ -182,7 +185,7 @@ export function Step2MeterDetails() {
     style={{
       display: 'flex', alignItems: 'center', gap: '12px',
       padding: '0 14px',
-      height: '58px',
+      height: '56px',
       background: '#f3f3f3',
       border: `1.5px solid ${selectedProvider ? 'var(--primary)' : 'var(--border)'}`,
       borderRadius: 'var(--radius-xs)',
@@ -226,7 +229,7 @@ export function Step2MeterDetails() {
         }}>✓</span>
       </>
     ) : (
-      <span style={{ fontSize: '14px', color: 'var(--text-faint)', fontFamily: 'var(--font-body)' }}>
+      <span style={{ fontSize: '14px', color: 'var(--text-muted)', fontFamily: 'var(--font-body)' }}>
         Select your distribution company
       </span>
     )}
@@ -403,14 +406,14 @@ export function Step2MeterDetails() {
           {meterNumber?.length >= 11 && !lookedUp && !looking && (
             <div style={{
               display: 'flex', alignItems: 'center', gap: '8px',
-              fontSize: '12px', color: 'var(--gold)',
-              fontFamily: 'var(--font-display)',
+              fontSize: isMobile ? '11px' : '12px', color: '#EE3644',
+              fontFamily: 'var(--font-medium)',
               // padding: '10px 14px',
               // background: 'rgba(255,213,79,0.06)',
               // border: '1px solid rgba(255,213,79,0.15)',
               // borderRadius: 'var(--radius-md)',
             }}>
-              <AlertCircle size={14} />
+              <AlertCircle size={isMobile ? 12 : 14} />
               Meter not verified; double-check before proceeding.
             </div>
           )}
@@ -582,12 +585,13 @@ export function Step2MeterDetails() {
           border: 'none',
           borderRadius: 'var(--radius-xs)',
           padding: '16px',
-          color: 'white',
-          fontFamily: 'var(--font-semibold)',
-          fontWeight: 700,
+          color: '#f5f5f0',
+          fontFamily: 'var(--font-medium)',
+          // fontWeight: 700,
           fontSize: '16px',
           cursor: 'pointer',
           // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
+          letterSpacing: '0.02em',
           transition: 'var(--transition)',
         }}
       >

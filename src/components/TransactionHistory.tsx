@@ -37,7 +37,7 @@ export function TransactionHistory() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--white)' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--text-title)' }}>
           Transaction History
         </h2>
         <Button
