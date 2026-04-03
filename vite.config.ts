@@ -17,7 +17,7 @@ export default defineConfig({
       },
     },
     allowedHosts: [
-      'acrylic-relevance-coaching-keno.trycloudflare.com'
+      'paragraph-mineral-harris-properly.trycloudflare.com'
     ],
   },
 })
