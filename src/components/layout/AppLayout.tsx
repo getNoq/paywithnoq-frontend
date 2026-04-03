@@ -10,6 +10,7 @@ import { SuccessScreen } from '@/components/steps/SuccessScreen'
 import { TransactionHistory } from '@/components/TransactionHistory'
 import { AdBackground } from '@/components/AdBackground'
 import { billTypeLabels } from '@/types'
+import { BillsSceneBackground } from '../BillsSceneBackground'
 
 type Tab = 'pay' | 'history'
 
@@ -71,6 +72,7 @@ export function AppLayout() {
 
   return (
     <>
+      <BillsSceneBackground />
       {/* Ad background — sits behind everything */}
       {/* <AdBackground /> */}
 
@@ -171,16 +173,17 @@ export function AppLayout() {
                 <div style={{
                   display: 'flex',
                   gap: '16px',
-                  justifyContent: 'center',
+                  justifyContent: 'flex-start',
                 }}>
               {step > 1 && !currentTransaction && (
                 <button
                   onClick={handleBack}
                   style={{
-                    background: 'rgba(23, 32, 25, 0.7)',
+                    // background: 'rgba(23, 32, 25, 0.7)',
+                    background: 'transparent',
                     backdropFilter: 'blur(8px)',
                     WebkitBackdropFilter: 'blur(8px)',
-                    border: '1px solid var(--border)',
+                    border: '1.5px solid var(--border)',
                     borderRadius: 'var(--radius-sm)', padding: '6px 10px',
                     color: 'var(--text-muted)', fontSize: '13px', cursor: 'pointer',
                     fontFamily: 'var(--font-body)', transition: 'var(--transition)',
@@ -221,7 +224,7 @@ export function AppLayout() {
           display: 'flex', justifyContent: 'center',
           padding: '0 20px 24px',
           // background: 'linear-gradient(to top, rgba(9,13,12,0.97) 60%, transparent)',
-          background: 'var(--white-warm)',
+          // background: 'var(--white-warm)',
           zIndex: 50,
         }}>
           <div style={{

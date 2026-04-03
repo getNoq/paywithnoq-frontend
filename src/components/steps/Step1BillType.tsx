@@ -3,6 +3,7 @@ import { usePaymentStore } from '@/store/paymentStore'
 import { BILL_OPTIONS, PROVIDERS_BY_BILL_TYPE } from '@/lib/data'
 import type { BillType } from '@/types'
 import { SecurityNote } from '../ui/SecurityNote'
+import { useMediaQuery } from 'react-responsive';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -16,13 +17,14 @@ const stagger = {
 export function Step1BillType() {
   const { selectedBillType, selectedProvider, setBillType, setProvider } = usePaymentStore()
   const providers = selectedBillType ? (PROVIDERS_BY_BILL_TYPE[selectedBillType] ?? []) : []
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   return (
     <motion.div variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
       {/* Bill type grid */}
       <motion.div variants={fadeUp}>
-        <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px', letterSpacing: '0.5px' }}>
+        <p style={{ fontSize: '14px', fontFamily: 'var(--font-medium)', fontWeight: 600, color: 'var(--text)', marginBottom: '4px', letterSpacing: '0.5px' }}>
           What would you like to pay?
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
@@ -38,7 +40,7 @@ export function Step1BillType() {
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
                   padding: '16px 10px',
                   background: isSelected ? 'var(--primary)' : opt.available ? '#F0FAF8' : '#F5F5F5 ',
-                  border: `1px solid ${isSelected ? 'var(--primary)' : opt.available ? 'rgba(0, 95, 86, 0.2)' : '#E5E7EB'}`,
+                  border: `1px solid ${isSelected ? 'var(--primary)' : opt.available ? 'rgba(0, 95, 86, 0.2)' : 'var(--border)'}`,
                   borderRadius: 'var(--radius-xs)',
                   cursor: opt.available ? 'pointer' : 'not-allowed',
                   opacity: opt.available ? 1 : 1,
@@ -74,14 +76,14 @@ export function Step1BillType() {
                     ✓
                   </span>
                 )}
-                <span style={{ fontSize: '24px' }}>{opt.icon}</span>
+                <span style={{ fontSize: '24px', opacity: opt.available ? 1 : 0.4 }}>{opt.icon}</span>
                 <span style={{
-                  fontFamily: isSelected ? 'var(--font-medium)' : 'var(--font-medium)',
-                  fontSize: '12px',
-                  fontWeight: isSelected ? 600 : 400,
+                  fontFamily: isSelected ? 'var(--font-semibold)' : 'var(--font-medium)',
+                  fontSize: isMobile ? '12px' : '12px',
+                  // fontWeight: isSelected ? 600 : 400,
                   color: isSelected ? 'var(--white)' : opt.available ? '#005F56' : '#9CA3AF ',
                   letterSpacing: '0.5px',
-                  lineHeight: '14px'
+                  lineHeight: isMobile ? '14px' : '14px'
                 }}>
                   {opt.label}
                 </span>
@@ -284,14 +286,14 @@ export function Step1BillType() {
                 border: 'none',
                 borderRadius: 'var(--radius-xs)',
                 padding: '16px',
-                color: 'var(--white)',
-                fontFamily: 'var(--font-semibold)',
+                color: '#f5f5f0',
+                fontFamily: 'var(--font-medium)',
                 // fontWeight: 700,
                 fontSize: '16px',
                 cursor: 'pointer',
                 // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
                 transition: 'var(--transition)',
-                letterSpacing: '1px',
+                letterSpacing: '0.02em',
               }}
             >
               Continue with {selectedBillType}

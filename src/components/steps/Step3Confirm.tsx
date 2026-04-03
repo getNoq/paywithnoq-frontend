@@ -11,6 +11,7 @@ import { Button, Badge } from '@/components/ui/primitives'
 import { useInvalidateTransactions } from '@/hooks/useTransactions'
 import { SecurityNote } from '../ui/SecurityNote'
 import { billTypeLabels } from '@/types'
+import { useMediaQuery } from 'react-responsive'
 
 function formatNaira(n: number) {
   return '₦' + n.toLocaleString('en-NG', { minimumFractionDigits: 2 })
@@ -26,6 +27,7 @@ export function Step3Confirm() {
     email,
     setTransaction,
   } = usePaymentStore()
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   const invalidate = useInvalidateTransactions()
 
@@ -131,13 +133,14 @@ export function Step3Confirm() {
     >
       {/* Full summary */}
       <div style={{
-        background: 'var(--surface)',
+        // background: 'var(--surface)',
+        background: 'rgb(240, 250, 248)',
         border: '1px solid var(--border)',
-        borderRadius: 'var(--radius-lg)',
+        borderRadius: 'var(--radius-sm)',
         overflow: 'hidden',
       }}>
         <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--border)' }}>
-          <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '1.2px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+          <span style={{ fontSize: '12px', fontFamily: 'var(--font-semibold)', fontWeight: 600, letterSpacing: '1.2px', textTransform: 'uppercase', color: 'var(--text)' }}>
             Payment summary
           </span>
         </div>
@@ -145,10 +148,10 @@ export function Step3Confirm() {
           {rows.map(row => (
             <div key={row.label} style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              padding: '10px 18px',
+              padding: '6px 18px',
             }}>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--text-muted)' }}>{row.label}</span>
-              <span style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 600, color: 'var(--text)', textAlign: 'right', maxWidth: '60%' }}>
+              <span style={{ fontFamily: 'var(--font-medium)', fontSize: '13px', color: 'var(--text)' }}>{row.label}</span>
+              <span style={{ fontFamily: 'var(--font-semibold)', fontSize: '14px', fontWeight: 600, color: 'var(--primary)', textAlign: 'right', textDecoration: 'none', maxWidth: '80%' }}>
                 {row.value}
               </span>
             </div>
@@ -160,10 +163,10 @@ export function Step3Confirm() {
           borderTop: '1px solid rgba(0,200,83,0.12)',
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         }}>
-          <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>Total payable</span>
+          <span style={{ fontSize: '14px', fontFamily: 'var(--font-semibold)', fontWeight: 600, color: 'var(--text)' }}>Total payable</span>
           <span style={{
             fontFamily: 'var(--font-display)', fontWeight: 800,
-            fontSize: '22px', color: 'var(--blue-light)',
+            fontSize: '22px', color: 'var(--primary)',
           }}>
             {formatNaira(amount ?? 0)}
           </span>
@@ -179,7 +182,7 @@ export function Step3Confirm() {
         <Badge variant="neutral"><Zap size={11} style={{ marginRight: '4px' }} />Instant token</Badge>
       </div> */}
 
-      <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-muted)' }}>
+      <p style={{ textAlign: 'center', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>
         By proceeding you agree to our terms of service. Powered by VTPass &amp; Paystack.
       </p>
 
@@ -191,16 +194,18 @@ export function Step3Confirm() {
         onClick={handlePay}
         style={{
           width: '100%',
-          background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
+          // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
+          background: 'var(--black)',
           border: 'none',
           borderRadius: 'var(--radius-md)',
           padding: '16px',
-          color: 'white',
-          fontFamily: 'var(--font-display)',
-          fontWeight: 700,
+          color: '#f5f5f0',
+          fontFamily: 'var(--font-medium)',
+          // fontWeight: 700,
           fontSize: '16px',
           cursor: 'pointer',
-          boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
+          // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
+          letterSpacing: '0.02em',
           transition: 'var(--transition)',
         }}
       >

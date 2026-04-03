@@ -93,7 +93,7 @@
   --text:         #525252;
   --text-title:   #0a0a0a;
   --text-muted:   #8d8d8d;
-  --text-faint:   #636363;
+  --text-faint:   #5E5E5E;
   --white:        #ffffff;
   --white-warm:   #F5F5F0;
   --white-cool:   #F7F9F8;
@@ -104,7 +104,7 @@
   --gold-bg:      rgba(255, 213, 79, 0.08);
   --input-bg:      #F3F3F3; 
 
-  --radius-xs:   4px;
+  --radius-xs:   8px;
   --radius-sm:   8px;
   --radius-md:   12px;
   --radius-lg:   18px;
@@ -138,7 +138,7 @@ body {
   font-family: var(--font-body);
   /* No solid bg — the AdBackground component provides the background */
   /* background: var(--bg); */
-  background: var(--white-cool);
+  background: var(--white-warm);
   color: var(--text);
   min-height: 100vh;
   line-height: 1.5;
@@ -162,7 +162,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0px 1000px var(--surface2) inset !important; /* background */
+  -webkit-box-shadow: 0 0 0px 1000px rgb(243, 243, 243) inset !important; /* background */
   -webkit-text-fill-color: var(--text) !important; /* text color */
   border: 1.5px solid var(--border) !important; /* border color */
   transition: background-color 5000s ease-in-out 0s;
@@ -170,11 +170,11 @@ input:-webkit-autofill:active {
 
 input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 3px rgba(0,200,83,0.1) inset; /* focus shadow */
-  border-color: var(--blue-light) !important;
+  border-color: var(--primary) !important;
 }
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 3px rgba(0,200,83,0.1) inset; /* focus shadow */
-  border-color: var(--blue-light) !important;
+  border-color: var(--primary) !important;
 }
 input:-webkit-autofill.error {
   -webkit-box-shadow: 0 0 0 3px rgba(255,82,82,0.1) inset;
@@ -216,7 +216,7 @@ textarea {
   position: relative;
   z-index: 1;
   overflow: hidden;
-  background: var(--white-warm);
+  /* background: var(--white-warm); */
 }
 
 .amount-input {
@@ -369,7 +369,7 @@ textarea {
   padding: 0 12px;
   border-radius: 8px;
   border: none;
-  background: #0F9D58;
+  background: #3B82F6;
   color: white;
   font-size: 12px;
   cursor: pointer;
@@ -414,11 +414,11 @@ textarea {
   background-color: #F5F5F5;
   font-size: 13px;
   font-weight: 600;
-  font-family: var(--font-display);
+  font-family: var(--font-medium);
   cursor: pointer;
   outline: none;
   transition: var(--transition);
-  color: #9CA3AF;
+  color: var(--text);
 }
 
 /* Active / selected style (optional) */
