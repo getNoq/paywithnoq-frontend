@@ -10,7 +10,7 @@ import { SuccessScreen } from '@/components/steps/SuccessScreen'
 import { TransactionHistory } from '@/components/TransactionHistory'
 import { AdBackground } from '@/components/AdBackground'
 import { billTypeLabels } from '@/types'
-import { BillsSceneBackground } from '../Billsscenebackground'
+import { BillsSceneBackground } from '../BillsSceneBackground'
 
 type Tab = 'pay' | 'history'
 
