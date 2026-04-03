@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap');
 
 @font-face {
   font-family: 'FuturaMDBold';
@@ -113,13 +114,14 @@
   /* --font-display: 'FuturaMDBold', sans-serif; */
   /* --font-display: 'Syne', sans-serif; */
   --font-display: 'ClashDisplay-Bold', sans-serif;
-  /* --font-display: "Plus Jakarta Sans", sans-serif; */
+  --font-title: "Parkinsans", sans-serif;
   /* --font-body: 'Effra', sans-serif; */
   /* --font-body: 'Inter', sans-serif;
   --font-body-bold: 'EffraBd', sans-serif; */
-  --font-body: 'ClashDisplay-Regular', sans-serif;
-  --font-medium: 'ClashDisplay-Medium', sans-serif;
-  --font-semibold: 'ClashDisplay-Semibold', sans-serif;
+  /* --font-body: 'ClashDisplay-Regular', sans-serif; */
+  --font-body: 'Parkinsans', sans-serif;
+  --font-medium: 'Parkinsans', sans-serif;
+  --font-semibold: 'Parkinsans', sans-serif;
   /* --font-body:    'DM Sans', sans-serif; */
 
   --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -240,7 +242,7 @@ textarea {
   right: 0;
 
   width: 100%;
-  padding: 20px;
+  padding: 16px;
 
   display: flex;
   align-items: center;
@@ -407,7 +409,7 @@ textarea {
 
 .quick-amount-btn {
   flex: 1 1 22%; /* default: 4 per row on desktop, with spacing */
-  max-width: 22%;
+  max-width: 23%;
   padding: 8px 14px;
   border: 1.5px solid #E5E7EB;
   border-radius: var(--radius-xs);

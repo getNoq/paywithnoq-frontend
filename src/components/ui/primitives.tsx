@@ -396,8 +396,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ) : hint ? (
           <span style={{
             fontSize: '11px',
-            color: 'var(--text)',
-            fontWeight: 600,
+            color: 'var(--text-muted)',
+            fontWeight: 500,
             paddingLeft: '2px',
           }}>
             {hint}
