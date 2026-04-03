@@ -100,7 +100,8 @@ export function BillsSceneBackground() {
 
         {/* ── Ground ── */}
         <rect x="0" y="148" width="1200" height="4" rx="2" fill="#E5E3DC"/>
-        <rect x="0" y="152" width="1200" height="28" fill="#EDEAE3"/>
+        <rect x="-800" y="152" width="1400" height="28" fill="#EDEAE3"/>
+        <rect x="600" y="152" width="1400" height="28" fill="#EDEAE3"/>
 
         {/* ── Buildings ── */}
         {/* B1 */}

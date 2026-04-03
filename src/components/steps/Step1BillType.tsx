@@ -22,6 +22,10 @@ export function Step1BillType() {
   return (
     <motion.div variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
+      <p style={{ fontSize: isMobile ? '32px' : '40px', fontFamily: 'var(--font-title)', fontWeight: 700, color: 'var(--black)', marginBottom: '4px', letterSpacing: '-0.5px', lineHeight: isMobile ? '40px' : '48px', marginTop: '-16px', maxWidth: isMobile ? '100%' : '90%' }}>
+        Get it done instantly with Noq
+      </p>
+
       {/* Bill type grid */}
       <motion.div variants={fadeUp}>
         <p style={{ fontSize: '14px', fontFamily: 'var(--font-medium)', fontWeight: 600, color: 'var(--text)', marginBottom: '4px', letterSpacing: '0.5px' }}>
@@ -80,7 +84,7 @@ export function Step1BillType() {
                 <span style={{
                   fontFamily: isSelected ? 'var(--font-semibold)' : 'var(--font-medium)',
                   fontSize: isMobile ? '12px' : '12px',
-                  // fontWeight: isSelected ? 600 : 400,
+                  fontWeight: isSelected ? 700 : 600,
                   color: isSelected ? 'var(--white)' : opt.available ? '#005F56' : '#9CA3AF ',
                   letterSpacing: '0.5px',
                   lineHeight: isMobile ? '14px' : '14px'
@@ -288,7 +292,7 @@ export function Step1BillType() {
                 padding: '16px',
                 color: '#f5f5f0',
                 fontFamily: 'var(--font-medium)',
-                // fontWeight: 700,
+                fontWeight: 600,
                 fontSize: '16px',
                 cursor: 'pointer',
                 // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
