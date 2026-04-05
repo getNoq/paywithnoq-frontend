@@ -201,7 +201,7 @@ export function Step3Confirm() {
           padding: '16px',
           color: '#f5f5f0',
           fontFamily: 'var(--font-medium)',
-          // fontWeight: 700,
+          fontWeight: 700,
           fontSize: '16px',
           cursor: 'pointer',
           // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
