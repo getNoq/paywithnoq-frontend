@@ -1,6 +1,6 @@
 // ─── Bill Types ───────────────────────────────────────────────────────────────
 
-export type BillType = 'electricity' | 'airtime' | 'data' | 'cable' | 'sport' | 'lasg' | 'scratch_card' | 'transport' | 'wallet'
+export type BillType = 'electricity' | 'wallet' | 'airtime' | 'data' | 'cable' | 'sport' | 'lasg' | 'scratch_card' | 'transport'
 
 export interface BillOption {
   id: BillType

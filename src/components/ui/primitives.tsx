@@ -214,6 +214,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     }, [value])
  
     const [isFocused, setIsFocused] = React.useState(false)
+    const [isHovered, setIsHovered] = React.useState(false)
  
     // Label floats up when: focused OR has content
     const labelFloated = isFocused || internalHasValue
@@ -288,6 +289,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             onChange={handleChange}
             onFocus={handleFocus}
             onBlur={handleBlur}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             // placeholder=" " keeps the label-as-placeholder trick working
             // without showing any placeholder text
             placeholder=" "
@@ -300,12 +303,24 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               paddingRight,
               borderRadius: 'var(--radius-xs)',
               border: `1.5px solid ${borderColor}`,
+              // border: `1.5px solid ${
+              //   isFocused
+              //     ? borderColor
+              //     : isHovered
+              //     ? '#999' // 👈 hover color
+              //     : borderColor
+              // }`,
               fontSize: '15px',
               outline: 'none',
-              background: '#F3F3F3',
+              background: '#FCFCFC',
               color: 'var(--text-title)',
               fontFamily: 'var(--font-medium)',
               transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+              // boxShadow: isFocused
+              //   ? `0 0 0 3px ${error ? 'rgba(255,82,82,0.1)' : 'rgba(0,200,83,0.1)'}`
+              //   : isHovered
+              //   ? '0 0 0 2px rgba(0,0,0,0.05)' // optional hover glow
+              //   : 'none',
               boxShadow: isFocused
                 ? `0 0 0 3px ${error ? 'rgba(255,82,82,0.1)' : 'rgba(0,200,83,0.1)'}`
                 : 'none',
@@ -324,7 +339,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 // Float up to top of input when active, center when idle
                 top: labelFloated ? '8px' : '50%',
                 transform: labelFloated ? 'none' : 'translateY(-50%)',
-                fontSize: labelFloated ? '10px' : '15px',
+                fontSize: labelFloated ? '10px' : '14px',
                 fontWeight: labelFloated ? 500 : 400,
                 fontFamily: labelFloated ? 'var(--font-medium)' : 'var(--font-body)',
                 letterSpacing: labelFloated ? '0.5px' : '0',
@@ -397,7 +412,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <span style={{
             fontSize: '11px',
             color: 'var(--text-muted)',
-            fontWeight: 500,
+            fontWeight: 400,
             paddingLeft: '2px',
           }}>
             {hint}

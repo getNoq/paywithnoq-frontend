@@ -4,6 +4,7 @@ import { BILL_OPTIONS, PROVIDERS_BY_BILL_TYPE } from '@/lib/data'
 import type { BillType } from '@/types'
 import { SecurityNote } from '../ui/SecurityNote'
 import { useMediaQuery } from 'react-responsive';
+import { useAuthStore } from '@/store/authStore'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -14,9 +15,14 @@ const stagger = {
   show: { transition: { staggerChildren: 0.05 } },
 }
 
-export function Step1BillType() {
+interface Props {
+  onOpenWallet: () => void   // called when NOQ Wallet card is clicked
+}
+
+export function Step1BillType({ onOpenWallet }: Props) {
   const { selectedBillType, selectedProvider, setBillType, setProvider } = usePaymentStore()
   const providers = selectedBillType ? (PROVIDERS_BY_BILL_TYPE[selectedBillType] ?? []) : []
+  const { isAuthenticated, user } = useAuthStore()
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   return (
@@ -273,7 +279,7 @@ export function Step1BillType() {
       {/* Continue button — only appears once provider is selected */}
       <AnimatePresence>
         {/* {selectedProvider && ( */}
-        {selectedBillType && providers.length > 0 && (
+        {(selectedBillType && providers.length > 0) || selectedBillType === 'wallet' ? (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -282,7 +288,13 @@ export function Step1BillType() {
           >
             <button
               type="button"
-              onClick={() => usePaymentStore.getState().setStep(2)}
+              onClick={() => {
+                if (selectedBillType === 'wallet') {
+                  onOpenWallet()
+                  return
+                }
+                usePaymentStore.getState().setStep(2)
+              }}
               style={{
                 width: '100%',
                 // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
@@ -292,26 +304,23 @@ export function Step1BillType() {
                 padding: '16px',
                 color: '#f5f5f0',
                 fontFamily: 'var(--font-medium)',
-                fontWeight: 600,
-                fontSize: '16px',
+                fontWeight: 500,
+                fontSize: '14px',
                 cursor: 'pointer',
                 // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
                 transition: 'var(--transition)',
                 letterSpacing: '0.02em',
+                marginBottom: '12px',
               }}
             >
-              Continue with {selectedBillType}
+              {selectedBillType === 'wallet'
+                ? 'Open Wallet'
+                : `Continue with ${selectedBillType}`}
             </button>
+            <SecurityNote />
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
-
-
-        
-        {/* {selectedProvider && ( */}
-        {selectedBillType && providers.length > 0 && (
-      <SecurityNote />
-        )}
     </motion.div>
   )
 }
