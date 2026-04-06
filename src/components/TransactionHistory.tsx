@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
-import { Download, RefreshCw, Receipt } from 'lucide-react'
+import { Download, RefreshCw, Receipt, User } from 'lucide-react'
 import { format, parseISO, isValid } from 'date-fns'
 import { useTransactions, useDownloadReceipt } from '@/hooks/useTransactions'
+import { useAuthStore } from '@/store/authStore'
 import { Badge, Button, Spinner } from '@/components/ui/primitives'
 import type { Transaction } from '@/types'
 
@@ -30,10 +31,99 @@ const BILL_ICON: Record<string, string> = {
   data:        '📡',
 }
 
-export function TransactionHistory() {
+interface Props {
+  onSignInRequest: () => void
+}
+
+export function TransactionHistory({ onSignInRequest }: Props) {
+  const { isAuthenticated } = useAuthStore()
   const { data, isLoading, refetch, isFetching } = useTransactions()
   const { download } = useDownloadReceipt()
 
+  // ── Guest gate ───────────────────────────────────────────────────────────
+  if (!isAuthenticated) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+      >
+        <h2 style={{ fontFamily: 'var(--font-title)', fontSize: '18px', color: 'var(--text-title)' }}>
+          Transaction History
+        </h2>
+
+        {/* Sign-in prompt card */}
+        <div style={{
+          textAlign: 'center', padding: '48px 24px',
+          background: 'rgb(240, 250, 248)', border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-sm)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px',
+        }}>
+          <div style={{
+            width: 64, height: 64, borderRadius: '50%',
+            background: 'var(--surface2)', border: '1.5px solid var(--border)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Receipt size={28} style={{ color: 'var(--text-muted)' }} />
+          </div>
+          <div>
+            <p style={{ color: 'var(--primary)', fontSize: '16px', fontWeight: 600, fontFamily: 'var(--font-title)', marginBottom: '6px' }}>
+              Your payment history
+            </p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '12px', lineHeight: 1.6 }}>
+              Sign in to see all your past payments, tokens, and receipts.
+            </p>
+          </div>
+        </div>
+        <div style={{
+          textAlign: 'center',
+          // background: 'var(--surface)', border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-lg)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px',
+        }}>
+          <button
+            type="button"
+            onClick={onSignInRequest}
+            style={{
+              width: '100%',
+              // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
+              background: 'var(--black)',
+              border: 'none',
+              borderRadius: 'var(--radius-xs)',
+              padding: '16px',
+              color: '#f5f5f0',
+              fontFamily: 'var(--font-medium)',
+              fontWeight: 500,
+              fontSize: '16px',
+              cursor: 'pointer',
+              // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
+              transition: 'var(--transition)',
+              letterSpacing: '0.02em',
+            }}
+          >
+            Sign in to view history
+          </button>
+          <p
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              fontSize: '12px',
+              color: 'var(--text)',
+              textAlign: 'center',
+              flexWrap: 'wrap',
+              lineHeight: '14px',
+              fontFamily: 'var(--font-medium)',
+            }}>
+            Guest payments are not saved, create an account to keep your records.
+          </p>
+          </div>
+      </motion.div>
+    )
+  }
+
+  // ── Authenticated view ────────────────────────────────────────────────────
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -134,7 +224,7 @@ function TransactionCard({ tx, index, onDownload }: { tx: Transaction; index: nu
           <div style={{ marginTop: '4px' }}>
             <Badge variant={STATUS_VARIANT[tx.status] ?? 'neutral'}>
               {tx.status}
-            </Badge>
+              </Badge>
           </div>
         </div>
       </div>
@@ -150,7 +240,7 @@ function TransactionCard({ tx, index, onDownload }: { tx: Transaction; index: nu
           <span style={{
             fontFamily: 'var(--font-display)', fontWeight: 700,
             fontSize: '14px', color: 'var(--green)', letterSpacing: '3px',
-          }}>
+            }}>
             {tx.token}
           </span>
         </div>

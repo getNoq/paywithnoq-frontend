@@ -182,7 +182,7 @@ export function Step3Confirm() {
         <Badge variant="neutral"><Zap size={11} style={{ marginRight: '4px' }} />Instant token</Badge>
       </div> */}
 
-      <p style={{ textAlign: 'center', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>
+      <p style={{ textAlign: 'center', fontSize: '12px', fontWeight: 500, color: 'var(--text-muted)' }}>
         By proceeding you agree to our terms of service. Powered by VTPass &amp; Paystack.
       </p>
 
@@ -201,8 +201,8 @@ export function Step3Confirm() {
           padding: '16px',
           color: '#f5f5f0',
           fontFamily: 'var(--font-medium)',
-          fontWeight: 700,
-          fontSize: '16px',
+          fontWeight: 500,
+          fontSize: '14px',
           cursor: 'pointer',
           // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
           letterSpacing: '0.02em',

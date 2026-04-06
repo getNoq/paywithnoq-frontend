@@ -186,7 +186,7 @@ export function Step2MeterDetails() {
       display: 'flex', alignItems: 'center', gap: '12px',
       padding: '0 14px',
       height: '56px',
-      background: '#f3f3f3',
+      background: '#FCFCFC',
       border: `1.5px solid ${selectedProvider ? 'var(--primary)' : 'var(--border)'}`,
       borderRadius: 'var(--radius-xs)',
       cursor: 'pointer',
@@ -249,7 +249,7 @@ export function Step2MeterDetails() {
     </svg>
 
     {/* Native select — invisible, covers the entire div */}
-    <select
+    <select required
       value={selectedProvider?.id ?? ''}
       onChange={e => {
         const found = providers.find(p => p.id === e.target.value)
@@ -508,7 +508,7 @@ export function Step2MeterDetails() {
             className='amount-input '
             style={{
               width: '100%',
-              background: 'var(--input-bg)',
+              background: '#FCFCFC',
               border: `2px solid ${amountValid && amount ? 'var(--primary)' : !amount ? 'var(--border)' : 'var(--danger)'}`,
               borderRadius: 'var(--radius-xs)',
               padding: '13px 14px 13px 42px',
@@ -588,12 +588,13 @@ export function Step2MeterDetails() {
           padding: '16px',
           color: '#f5f5f0',
           fontFamily: 'var(--font-medium)',
-          fontWeight: 700,
-          fontSize: '16px',
+          fontWeight: 500,
+          fontSize: '14px',
           cursor: 'pointer',
           // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
           letterSpacing: '0.02em',
           transition: 'var(--transition)',
+          marginBottom: '12px',
         }}
       >
         Review & Pay {amountValid ? formatNaira(numAmount) : ''}
