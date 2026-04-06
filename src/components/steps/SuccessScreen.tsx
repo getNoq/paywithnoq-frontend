@@ -72,7 +72,7 @@ export function SuccessScreen() {
 
       {/* Title */}
       <div>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '26px', color: 'var(--white)', marginBottom: '6px' }}>
+        <h2 style={{ fontFamily: 'var(--font-title)', fontSize: '26px', color: 'var(--black)', marginBottom: '6px' }}>
           {isPending ? 'Payment Received!' : 'Payment Successful!'}
         </h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
@@ -182,17 +182,20 @@ export function SuccessScreen() {
           onClick={reset}
           style={{
             width: '100%',
-            background: 'linear-gradient(135deg, var(--green) 0%, var(--naija) 100%)',
+            // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
+            background: 'var(--black)',
             border: 'none',
-            borderRadius: 'var(--radius-md)',
+            borderRadius: 'var(--radius-xs)',
             padding: '16px',
-            color: 'white',
-            fontFamily: 'var(--font-display)',
-            fontWeight: 700,
+            color: '#f5f5f0',
+            fontFamily: 'var(--font-medium)',
+            fontWeight: 600,
             fontSize: '16px',
             cursor: 'pointer',
-            boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
+            // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
             transition: 'var(--transition)',
+            letterSpacing: '0.02em',
+            marginBottom: '12px',
           }}
         >
           New payment
