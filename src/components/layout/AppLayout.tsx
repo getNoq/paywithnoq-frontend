@@ -79,11 +79,11 @@ function AuthTab({ defaultView = 'signin', onSuccess, onContinueAsGuest }: AuthT
           display: 'flex', alignItems: 'center', gap: '14px',
           padding: '16px',
           background: 'var(--surface)', border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-lg)',
+          borderRadius: 'var(--radius-sm)',
         }}>
           <div style={{
             width: 52, height: 52, borderRadius: '50%', flexShrink: 0,
-            background: 'linear-gradient(135deg, var(--green), var(--naija))',
+            background: 'var--(primary)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontFamily: 'var(--font-display)', fontWeight: 800,
             fontSize: '20px', color: 'white',
@@ -91,10 +91,10 @@ function AuthTab({ defaultView = 'signin', onSuccess, onContinueAsGuest }: AuthT
             {user.username?.charAt(0).toUpperCase()}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '16px', color: 'var(--white)' }}>
+            <div style={{ fontFamily: 'var(--font-title)', fontWeight: 700, fontSize: '16px', color: 'var(--white)' }}>
               {user.username}
             </div>
-            <div style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <div style={{ fontSize: '12px', color: 'var(--text)', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {user.email}
             </div>
           </div>
@@ -122,17 +122,17 @@ function AuthTab({ defaultView = 'signin', onSuccess, onContinueAsGuest }: AuthT
             style={{
               display: 'flex', alignItems: 'center', gap: '14px',
               padding: '14px 16px', width: '100%', textAlign: 'left',
-              background: 'var(--surface)', border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-md)', cursor: 'pointer',
+              background: 'rgb(240, 250, 248)', border: '1.5px solid rgba(0, 95, 86, 0.2)',
+              borderRadius: 'var(--radius-xs)', cursor: 'pointer',
               transition: 'var(--transition)',
             }}
           >
-            <div style={{ color: 'var(--green)', flexShrink: 0 }}>{item.icon}</div>
+            <div style={{ color: 'var(--primary)', flexShrink: 0 }}>{item.icon}</div>
             <div>
-              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: '14px', color: 'var(--text)' }}>
+              <div style={{ fontFamily: 'var(--font-title)', fontWeight: 600, fontSize: '14px', color: 'var(--primary)' }}>
                 {item.label}
               </div>
-              <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--text)', marginTop: '2px' }}>
                 {item.sub}
               </div>
             </div>
@@ -147,7 +147,7 @@ function AuthTab({ defaultView = 'signin', onSuccess, onContinueAsGuest }: AuthT
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             padding: '13px', width: '100%', marginTop: '4px',
             background: 'transparent', border: '1px solid rgba(255,82,82,0.2)',
-            borderRadius: 'var(--radius-md)', color: 'var(--danger)',
+            borderRadius: 'var(--radius-xs)', color: 'var(--danger)',
             cursor: 'pointer', fontFamily: 'var(--font-body)',
             fontWeight: 500, fontSize: '14px', transition: 'var(--transition)',
           }}
@@ -304,15 +304,15 @@ export function AppLayout() {
                 onClick={() => setTab('auth')}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '6px',
-                  background: 'rgba(23,32,25,0.7)', backdropFilter: 'blur(8px)',
+                  background: 'white', backdropFilter: 'blur(8px)',
                   border: '1px solid var(--border)', borderRadius: '20px',
-                  padding: '4px 10px 4px 6px', fontSize: '13px', color: 'var(--green)',
+                  padding: '8px 16px', fontSize: '14px', color: 'var(--primary)',
                   cursor: 'pointer',
                 }}
               >
                 <div style={{
                   width: 22, height: 22, borderRadius: '50%',
-                  background: 'linear-gradient(135deg, var(--green), var(--naija))',
+                  background: 'black',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '10px', fontWeight: 800, color: 'white',
                 }}>
