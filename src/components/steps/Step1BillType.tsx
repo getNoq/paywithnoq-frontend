@@ -28,7 +28,7 @@ export function Step1BillType({ onOpenWallet }: Props) {
   return (
     <motion.div variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-      <p style={{ fontSize: isMobile ? '32px' : '40px', fontFamily: 'var(--font-title)', fontWeight: 700, color: 'var(--black)', marginBottom: '4px', letterSpacing: '-0.5px', lineHeight: isMobile ? '40px' : '48px', marginTop: '-16px', maxWidth: isMobile ? '100%' : '90%' }}>
+      <p style={{ fontSize: isMobile ? '32px' : '40px', fontFamily: 'var(--font-title)', fontWeight: 700, color: 'var(--black)', marginBottom: '4px', letterSpacing: '-0.5px', lineHeight: isMobile ? '40px' : '48px', marginTop: isMobile ? '-16px' : '-24px', maxWidth: isMobile ? '100%' : '90%' }}>
         Get it done instantly with Noq
       </p>
 
@@ -59,6 +59,7 @@ export function Step1BillType({ onOpenWallet }: Props) {
                   outline: 'none',
                   position: 'relative',
                   justifyContent: 'center',
+                  minHeight: '100px',
                 }}
               >
                 {!opt.available && (
