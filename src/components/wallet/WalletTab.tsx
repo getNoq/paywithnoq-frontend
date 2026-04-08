@@ -46,13 +46,33 @@ function FundSheet({ onClose }: FundSheetProps) {
     reference: paystackConfig?.reference ?? '',
     metadata: { payment_type: 'wallet_topup' },
     onSuccess: (reference) => {
-      verify(reference, {
-        onSuccess: () => {
-          toast.success('Wallet funded successfully!')
-          onClose()
-        },
-        onError: () => toast.error('Could not verify funding. Contact support.'),
-      })
+        // Poll verify every 2 seconds for up to 30 seconds
+        let attempts = 0
+        const MAX = 15
+
+        const poll = () => {
+            attempts++
+            verify(reference, {
+            onSuccess: (data) => {
+                if (data.funding?.status === 'success') {
+                toast.success('Wallet funded successfully!')
+                onClose()
+                } else if (attempts < MAX) {
+                setTimeout(poll, 2000)
+                } else {
+                toast('Top-up received — balance will update shortly.', { icon: '✅' })
+                onClose()
+                }
+            },
+            onError: () => {
+                if (attempts < MAX) setTimeout(poll, 2000)
+                else toast.error('Could not confirm funding. Check your balance.')
+            },
+            })
+        }
+
+        // Start polling after 1.5s to give webhook time to fire
+        setTimeout(poll, 1500)
     },
     onClose: () => toast('Funding cancelled.', { icon: '⚠️' }),
   })
