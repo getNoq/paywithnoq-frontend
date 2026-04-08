@@ -15,7 +15,7 @@ import { SignIn } from '@/components/auth/SignIn'
 import { SignUp } from '@/components/auth/SignUp'
 import { BillsSceneBackground } from '../BillsSceneBackground'
 import toast from 'react-hot-toast'
-import { WalletTab } from '../../components/wallet/WalletTab'
+import { WalletTab } from '@/components/wallet/WalletTab'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Tab = 'pay' | 'history' | 'auth' | 'wallet'
