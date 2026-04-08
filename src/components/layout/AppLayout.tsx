@@ -15,9 +15,10 @@ import { SignIn } from '@/components/auth/SignIn'
 import { SignUp } from '@/components/auth/SignUp'
 import { BillsSceneBackground } from '../BillsSceneBackground'
 import toast from 'react-hot-toast'
+import { WalletTab } from '../../components/wallet/WalletTab'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type Tab = 'pay' | 'history' | 'auth'
+type Tab = 'pay' | 'history' | 'auth' | 'wallet'
 type AuthView = 'signin' | 'signup'
 
 // ── Pay steps ─────────────────────────────────────────────────────────────────
@@ -60,9 +61,11 @@ interface AuthTabProps {
   defaultView?: AuthView
   onSuccess: () => void
   onContinueAsGuest: () => void
+  onOpenWallet: () => void
+  setTab: (tab: Tab) => void
 }
 
-function AuthTab({ defaultView = 'signin', onSuccess, onContinueAsGuest }: AuthTabProps) {
+function AuthTab({ defaultView = 'signin', onSuccess, onContinueAsGuest, onOpenWallet, setTab }: AuthTabProps) {
   const { isAuthenticated, user, logout } = useAuthStore()
   const [view, setView] = useState<AuthView>(defaultView)
 
@@ -78,23 +81,23 @@ function AuthTab({ defaultView = 'signin', onSuccess, onContinueAsGuest }: AuthT
         <div style={{
           display: 'flex', alignItems: 'center', gap: '14px',
           padding: '16px',
-          background: 'var(--surface)', border: '1px solid var(--border)',
+          background: 'linear-gradient(135deg, #005F56 0%, #003D36 100%)', border: '1px solid var(--border)',
           borderRadius: 'var(--radius-sm)',
         }}>
           <div style={{
             width: 52, height: 52, borderRadius: '50%', flexShrink: 0,
-            background: 'var--(primary)',
+            background: 'rgb(240, 250, 248)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'var(--font-display)', fontWeight: 800,
-            fontSize: '20px', color: 'white',
+            fontFamily: 'var(--font-title)', fontWeight: 700,
+            fontSize: '20px', color: 'var(--primary)',
           }}>
             {user.username?.charAt(0).toUpperCase()}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontFamily: 'var(--font-title)', fontWeight: 700, fontSize: '16px', color: 'var(--white)' }}>
+            <div style={{ fontFamily: 'var(--font-title)', fontWeight: 600, fontSize: '16px', color: 'var(--white)' }}>
               {user.username}
             </div>
-            <div style={{ fontSize: '12px', color: 'var(--text)', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <div style={{ fontSize: '12px', color: 'rgb(240, 250, 248)', marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {user.email}
             </div>
           </div>
@@ -102,17 +105,17 @@ function AuthTab({ defaultView = 'signin', onSuccess, onContinueAsGuest }: AuthT
 
         {/* Menu items */}
         {[
-          {
+          { 
             icon: <Wallet size={16} />,
             label: 'My Wallet',
-            sub: 'Balance & top-up — coming soon',
-            onClick: () => toast('Wallet feature coming soon!'),
+            sub: 'Balance & top-up',
+            onClick: onOpenWallet,
           },
           {
             icon: <Receipt size={16} />,
             label: 'Transaction History',
             sub: 'View all your payments',
-            onClick: () => toast('Switch to the History tab'),
+            onClick: () => setTab('history'),
           },
         ].map(item => (
           <button
@@ -132,7 +135,7 @@ function AuthTab({ defaultView = 'signin', onSuccess, onContinueAsGuest }: AuthT
               <div style={{ fontFamily: 'var(--font-title)', fontWeight: 600, fontSize: '14px', color: 'var(--primary)' }}>
                 {item.label}
               </div>
-              <div style={{ fontSize: '12px', color: 'var(--text)', marginTop: '2px' }}>
+              <div style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: 'var(--text)', marginTop: '2px' }}>
                 {item.sub}
               </div>
             </div>
@@ -208,6 +211,15 @@ export function AppLayout() {
   function openAuth(view: AuthView = 'signin') {
     setAuthDefaultView(view)
     setTab('auth')
+  }
+
+  // Opens wallet if signed in, auth if not
+  function openWallet() {
+    if (isAuthenticated) {
+      setTab('wallet')
+    } else {
+      openAuth('signin')
+    }
   }
 
   // After successful sign-in go back to pay tab
@@ -304,21 +316,22 @@ export function AppLayout() {
                 onClick={() => setTab('auth')}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '6px',
-                  background: 'white', backdropFilter: 'blur(8px)',
+                  background: 'rgb(240, 250, 248)', backdropFilter: 'blur(8px)',
                   border: '1px solid var(--border)', borderRadius: '20px',
-                  padding: '8px 16px', fontSize: '14px', color: 'var(--primary)',
+                  padding: '4px 8px 4px 4px', fontFamily: 'var(--font-title)', fontSize: '14px', fontWeight: 500, color: 'var(--primary)',
                   cursor: 'pointer',
                 }}
               >
                 <div style={{
-                  width: 22, height: 22, borderRadius: '50%',
-                  background: 'black',
+                  width: 28, height: 28, borderRadius: '50%',
+                  background: 'var(--primary)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '10px', fontWeight: 800, color: 'white',
+                  fontSize: '14px', fontFamily: 'var(--font-title)', fontWeight: 600, color: 'white',
                 }}>
                   {user?.username?.charAt(0).toUpperCase()}
                 </div>
-                {user?.username}
+                {/* {user?.username} */}
+                Dashboard
               </button>
             )}
           </div>
@@ -392,7 +405,7 @@ export function AppLayout() {
                 </div>
               {/* <StepIndicator current={step as 1 | 2 | 3} /> */}
               {/* <StepHeading /> */}
-                <PayStep onOpenWallet={() => openAuth('signin')} />
+                <PayStep onOpenWallet={openWallet} />
               </>
             )}
 
@@ -401,6 +414,37 @@ export function AppLayout() {
               <TransactionHistory
                 onSignInRequest={() => openAuth('signin')}
               />
+            )}
+
+            {/* ── Wallet tab ── */}
+            {tab === 'wallet' && (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setTab('pay')}
+                    style={{
+                      background: 'transparent', border: '1.5px solid var(--border)',
+                      borderRadius: 'var(--radius-sm)', padding: '6px 10px',
+                      color: 'var(--text-muted)', fontSize: '13px', cursor: 'pointer',
+                      fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: '4px',
+                    }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                    Back
+                  </button>
+                  <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--white)', margin: 0 }}>
+                    My Wallet
+                  </h2>
+                </div>
+                <WalletTab />
+              </motion.div>
             )}
 
             {/* ── Auth tab — full inline, no modal ── */}
@@ -434,6 +478,8 @@ export function AppLayout() {
                   defaultView={authDefaultView}
                   onSuccess={handleAuthSuccess}
                   onContinueAsGuest={handleContinueAsGuest}
+                  onOpenWallet={openWallet}
+                  setTab={setTab}
                 />
               </motion.div>
             )}

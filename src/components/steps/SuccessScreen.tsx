@@ -72,14 +72,14 @@ export function SuccessScreen() {
 
       {/* Title */}
       <div>
-        <h2 style={{ fontFamily: 'var(--font-title)', fontSize: '26px', color: 'var(--black)', marginBottom: '6px' }}>
+        <h2 style={{ fontFamily: 'var(--font-title)', fontWeight: 600, fontSize: '24px', color: 'var(--black)', marginBottom: '6px' }}>
           {isPending ? 'Payment Received!' : 'Payment Successful!'}
         </h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>
           ₦{Number(t.amount).toLocaleString('en-NG')} paid to {t.provider_name}
         </p>
         {isPending && (
-          <p style={{ color: 'var(--gold)', fontSize: '13px', marginTop: '8px', padding: '8px 14px', background: 'rgba(255,213,79,0.08)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,213,79,0.15)' }}>
+          <p style={{ color: 'var(--orange)', fontSize: '13px', marginTop: '8px', padding: '8px 14px', background: 'rgba(255,213,79,0.08)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255,213,79,0.15)' }}>
             ⚡ Your token is being vended — usually takes under 30 seconds. Refresh shortly.
           </p>
         )}
@@ -128,9 +128,9 @@ export function SuccessScreen() {
       {/* Transaction details */}
       <div style={{
         width: '100%',
-        background: 'var(--surface)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius-md)',
+        background: 'rgb(240, 250, 248)',
+        border: '1.5px solid var(--primary)',
+        borderRadius: 'var(--radius-sm)',
         overflow: 'hidden',
       }}>
         {[
