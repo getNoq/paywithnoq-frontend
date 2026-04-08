@@ -279,14 +279,14 @@ export function Step3Confirm() {
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 style={{
-                  fontSize: '12px', color: 'var(--orange)',
+                  fontSize: '13px', color: '#667085',
                   padding: '10px 14px',
-                  background: 'rgba(255,213,79,0.06)',
-                  border: '1px solid rgba(255,213,79,0.15)',
-                  borderRadius: 'var(--radius-md)',
+                  background: '#FFF3CC',
+                  border: '1.5px solid #D9C6AB',
+                  borderRadius: '4px',
                 }}
-              >
-                ⚠️ Not enough wallet balance for this payment. Top up or pay with card.
+              ><span style={{ fontSize: '16px' }}>⚠️</span>
+                 Not enough wallet balance for this payment. Top up or pay with card.
               </motion.div>
             )}
           </AnimatePresence>
@@ -302,8 +302,34 @@ export function Step3Confirm() {
         <Badge variant="neutral"><Zap size={11} style={{ marginRight: '4px' }} />Instant token</Badge>
       </div> */}
 
+      {!isAuthenticated && (
+        <div
+          style={{
+            marginTop: '12px',
+            padding: '12px 14px',
+            borderRadius: '4px',
+            background: '#FFF3CC',
+            border: '1.5px solid #D9C6AB',
+            fontSize: '13px',
+            color: '#667085',
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: '8px',
+          }}
+        >
+          {/* <span style={{ fontSize: '16px' }}>⚡</span> */}
+          <span>
+            ⚡ Save time on future payments -{' '}
+            <strong style={{ color: 'var(--text)' }}>
+              sign up and pay with your wallet
+            </strong>{' '}
+            for faster checkout.
+          </span>
+        </div>
+      )}
+
       <p style={{ textAlign: 'center', fontSize: '12px', fontWeight: 500, color: 'var(--text-muted)' }}>
-        By proceeding you agree to our terms of service. Powered by VTPass &amp; Paystack.
+        By proceeding, you agree to our terms of service.
       </p>
 
       {/* Pay button */}

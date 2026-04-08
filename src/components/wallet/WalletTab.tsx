@@ -222,7 +222,7 @@ function FundSheet({ onClose }: FundSheetProps) {
         {initiating ? 'Preparing…' : verifying ? 'Confirming…' : `Fund ${isValid ? fmt(numAmount) : 'Wallet'}`}
       </Button>
 
-      <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-faint)' }}>
+      <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-faint)', marginTop: '-12px' }}>
         Secured by Paystack · Funds available instantly
       </p>
     </motion.div>
@@ -295,7 +295,7 @@ export function WalletTab() {
       {/* ── Balance card ── */}
       <div style={{
         background: 'linear-gradient(135deg, #005F56 0%, #003D36 100%)',
-        borderRadius: 'var(--radius-lg)',
+        borderRadius: 'var(--radius-md)',
         padding: '28px 24px',
         position: 'relative', overflow: 'hidden',
       }}>
@@ -363,7 +363,7 @@ export function WalletTab() {
               background: 'rgb(245, 245, 245)',
               border: '1px solid var(--border)',
               borderRadius: 'var(--radius-sm)',
-              padding: '20px',
+              padding: '16px 12px',
               overflow: 'hidden',
             }}
           >
