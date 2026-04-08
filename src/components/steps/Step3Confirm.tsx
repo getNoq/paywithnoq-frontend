@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { ShieldCheck, Zap } from 'lucide-react'
+import { ShieldCheck, Zap, Wallet, CreditCard } from 'lucide-react'
 
 import { usePaymentStore } from '@/store/paymentStore'
+import { useAuthStore } from '@/store/authStore'
+import { useWalletBalance, useWalletPayBill, useInvalidateWallet } from '@/hooks/useWallet'
 import { initiatePayment, verifyPayment } from '@/lib/api'
 import { usePaystack } from '@/hooks/usePaystack'
 import { Button, Badge } from '@/components/ui/primitives'
@@ -12,6 +14,8 @@ import { useInvalidateTransactions } from '@/hooks/useTransactions'
 import { SecurityNote } from '../ui/SecurityNote'
 import { billTypeLabels } from '@/types'
 import { useMediaQuery } from 'react-responsive'
+
+type PayMethod = 'paystack' | 'wallet'
 
 function formatNaira(n: number) {
   return '₦' + n.toLocaleString('en-NG', { minimumFractionDigits: 2 })
@@ -29,27 +33,40 @@ export function Step3Confirm() {
   } = usePaymentStore()
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
-  const invalidate = useInvalidateTransactions()
+  const { isAuthenticated } = useAuthStore()
+  const { data: walletData } = useWalletBalance()
+  const walletBalance = Number(walletData?.wallet?.balance ?? 0)
+  const hasSufficientBalance = walletBalance >= (amount ?? 0)
 
+  // Default to wallet if signed in and has balance, else Paystack
+  const [payMethod, setPayMethod] = useState<PayMethod>(
+    isAuthenticated && hasSufficientBalance ? 'wallet' : 'paystack'
+  )
+
+  const invalidateTxs = useInvalidateTransactions()
+  const invalidateWallet = useInvalidateWallet()
+
+  // ── Paystack flow ─────────────────────────────────────────────────────────
   const [paystackConfig, setPaystackConfig] = useState<{
-    publicKey: string
-    reference: string
-    amount: number
+    publicKey: string;
+    reference: string;
+    amount: number;
     email: string
   } | null>(null)
+  const [popupTriggered, setPopupTriggered] = useState(false)
 
   // Step 1: hit Django to create order, get Paystack ref
   const { mutate: initiate, isPending: initiating } = useMutation({
     mutationFn: () =>
       initiatePayment({
-        billType: selectedBillType!,
-        providerId: selectedProvider!.id,
-        meterNumber: meterInfo!.meterNumber,
-        meterType: meterInfo!.meterType,
-        amount: amount!,
-        phone,
-        email,
-      }),
+      billType: selectedBillType!,
+      providerId: selectedProvider!.id,
+      meterNumber: meterInfo!.meterNumber,
+      meterType: meterInfo!.meterType,
+      amount: amount!,
+      phone,
+      email,
+    }),
     onSuccess: (data) => {
       setPaystackConfig({
         publicKey: data.paystackPublicKey,
@@ -58,17 +75,7 @@ export function Step3Confirm() {
         email: data.email,
       })
     },
-    onError: (error: any) => {
-  console.log('INITIATE ERROR:', error)
-
-  const message =
-    error?.response?.data?.detail ||
-    error?.response?.data ||
-    error.message ||
-    'Unknown error'
-
-  toast.error(message)
-},
+    onError: () => toast.error('Could not initiate payment. Please try again.'),
   })
 
   // Step 2: verify payment + trigger token vend
@@ -76,7 +83,7 @@ export function Step3Confirm() {
     mutationFn: (reference: string) => verifyPayment(reference),
     onSuccess: ({ transaction }) => {
       setTransaction(transaction)
-      invalidate()
+      invalidateTxs()
       toast.success('Payment confirmed! Token on its way.')
     },
     onError: () => toast.error('Payment verification failed. Contact support.'),
@@ -98,17 +105,44 @@ export function Step3Confirm() {
     onClose: () => toast('Payment cancelled.', { icon: '⚠️' }),
   })
 
-  // When config is ready, auto-open popup
-  const [popupTriggered, setPopupTriggered] = useState(false)
   if (paystackConfig && !popupTriggered) {
     setPopupTriggered(true)
     setTimeout(() => openPopup(), 100) // slight delay for hook to settle
   }
 
+  // ── Wallet flow ───────────────────────────────────────────────────────────
+  const { mutate: walletPay, isPending: walletPaying } = useWalletPayBill()
+
   function handlePay() {
-    setPopupTriggered(false)
-    initiate()
+    if (payMethod === 'wallet') {
+      walletPay(
+        {
+          billType: selectedBillType!,
+          providerId: selectedProvider!.id,
+          meterNumber: meterInfo!.meterNumber,
+          meterType: meterInfo!.meterType,
+          amount: amount!, phone, email,
+        },
+        {
+          onSuccess: ({ transaction }) => {
+            setTransaction(transaction)
+            invalidateTxs()
+            invalidateWallet()
+            toast.success('Paid from wallet! Token on its way.')
+          },
+          onError: (err: any) => {
+            const msg = err?.response?.data?.detail || 'Wallet payment failed.'
+            toast.error(msg)
+          },
+        }
+      )
+    } else {
+      setPopupTriggered(false)
+      initiate()
+    }
   }
+
+  const isLoading = initiating || verifying || walletPaying
 
   const rows: { label: string; value: string }[] = [
     {
@@ -173,6 +207,92 @@ export function Step3Confirm() {
         </div>
       </div>
 
+      {/* ── Payment method picker — only shown when signed in ── */}
+      {isAuthenticated && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <span style={{ fontSize: '11px', fontWeight: 500, letterSpacing: '1.2px', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+            Pay with
+          </span>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+
+            {/* Wallet option */}
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.98 }}
+              onClick={() => hasSufficientBalance && setPayMethod('wallet')}
+              style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
+                gap: '6px', padding: '14px',
+                background: payMethod === 'wallet' ? 'rgba(0,200,83,0.07)' : 'rgb(245, 245, 245)',
+                border: `1.5px solid ${payMethod === 'wallet' ? 'var(--primary)' : 'var(--border)'}`,
+                borderRadius: 'var(--radius-sm)', cursor: hasSufficientBalance ? 'pointer' : 'not-allowed',
+                opacity: hasSufficientBalance ? 1 : 0.5,
+                transition: 'var(--transition)', outline: 'none',
+                // boxShadow: payMethod === 'wallet' ? '0 0 0 1px var(--primary)' : 'none',
+              }}
+            >
+              <Wallet size={18} style={{ color: payMethod === 'wallet' ? 'var(--primary)' : 'var(--text-muted)' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', alignItems: 'flex-start' }}>
+                <div style={{ fontFamily: 'var(--font-title)', fontWeight: 600, fontSize: '13px', color: payMethod === 'wallet' ? 'var(--primary)' : 'var(--text)' }}>
+                  NOQ Wallet
+                </div>
+                <div style={{ fontFamily: 'var(--font-title)', fontSize: '12px', color: hasSufficientBalance ? 'var(--text)' : 'var(--danger)', marginTop: '2px' }}>
+                  {hasSufficientBalance
+                    ? `Balance: ${formatNaira(walletBalance)}`
+                    : `Insufficient (${formatNaira(walletBalance)})`}
+                </div>
+              </div>
+            </motion.button>
+
+            {/* Paystack option */}
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setPayMethod('paystack')}
+              style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
+                gap: '6px', padding: '14px',
+                background: payMethod === 'paystack' ? 'rgba(0,200,83,0.07)' : 'rgb(245, 245, 245)',
+                border: `1.5px solid ${payMethod === 'paystack' ? 'var(--primary)' : 'var(--border)'}`,
+                borderRadius: 'var(--radius-sm)', cursor: 'pointer',
+                transition: 'var(--transition)', outline: 'none',
+                // boxShadow: payMethod === 'paystack' ? '0 0 0 1px var(--primary)' : 'none',
+              }}
+            >
+              <CreditCard size={18} style={{ color: payMethod === 'paystack' ? 'var(--primary)' : 'var(--text-muted)' }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', alignItems: 'flex-start' }}>
+                <div style={{ fontFamily: 'var(--font-title)', fontWeight: 600, fontSize: '13px', color: payMethod === 'paystack' ? 'var(--primary)' : 'var(--text)' }}>
+                  Card / Bank
+                </div>
+                <div style={{ fontFamily: 'var(--font-title)', fontSize: '12px', color: 'var(--text)', marginTop: '2px' }}>
+                via Paystack
+                </div>
+              </div>
+            </motion.button>
+          </div>
+
+          {/* Wallet insufficient hint */}
+          <AnimatePresence>
+            {!hasSufficientBalance && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                style={{
+                  fontSize: '12px', color: 'var(--orange)',
+                  padding: '10px 14px',
+                  background: 'rgba(255,213,79,0.06)',
+                  border: '1px solid rgba(255,213,79,0.15)',
+                  borderRadius: 'var(--radius-md)',
+                }}
+              >
+                ⚠️ Not enough wallet balance for this payment. Top up or pay with card.
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
+
       {/* Trust badges */}
       {/* <div style={{
         display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center',
@@ -190,7 +310,7 @@ export function Step3Confirm() {
       <Button
         variant="primary"
         size="lg"
-        loading={initiating || verifying}
+        loading={isLoading}
         onClick={handlePay}
         style={{
           width: '100%',
@@ -209,7 +329,12 @@ export function Step3Confirm() {
           transition: 'var(--transition)',
         }}
       >
-        {initiating ? 'Preparing payment…' : verifying ? 'Confirming…' : `Pay ${formatNaira(amount ?? 0)} with Paystack`}
+        {isLoading
+          ? payMethod === 'wallet' ? 'Processing…' : initiating ? 'Preparing payment…' : 'Confirming…'
+          : payMethod === 'wallet'
+            ? `Pay ${formatNaira(amount ?? 0)} from Wallet`
+            : `Pay ${formatNaira(amount ?? 0)} with Paystack`
+        }
       </Button>
 
       <SecurityNote />

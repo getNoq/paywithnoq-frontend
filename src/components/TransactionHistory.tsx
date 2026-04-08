@@ -61,10 +61,10 @@ export function TransactionHistory({ onSignInRequest }: Props) {
         }}>
           <div style={{
             width: 64, height: 64, borderRadius: '50%',
-            background: 'var(--surface2)', border: '1.5px solid var(--border)',
+            background: 'var(--primary)', border: '1.5px solid var(--border)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <Receipt size={28} style={{ color: 'var(--text-muted)' }} />
+            <Receipt size={28} style={{ color: 'rgb(240, 250, 248)' }} />
           </div>
           <div>
             <p style={{ color: 'var(--primary)', fontSize: '16px', fontWeight: 600, fontFamily: 'var(--font-title)', marginBottom: '6px' }}>
@@ -149,12 +149,12 @@ export function TransactionHistory({ onSignInRequest }: Props) {
       {!isLoading && (!data?.results || data.results.length === 0) && (
         <div style={{
           textAlign: 'center', padding: '48px 20px',
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-lg)',
+          background: 'rgb(240, 250, 248)',
+          border: '1px solid rgba(0, 95, 86, 0.2)',
+          borderRadius: 'var(--radius-sm)',
         }}>
           <Receipt size={36} style={{ color: 'var(--text-faint)', marginBottom: '12px' }} />
-          <p style={{ color: 'var(--white-warm)', fontSize: '14px' }}>No transactions yet</p>
+          <p style={{ color: 'var(--primary)', fontSize: '15px', fontWeight: 600 }}>No transactions yet</p>
           <p style={{ color: 'var(--text-faint)', fontSize: '13px', marginTop: '4px' }}>Your payment history will appear here</p>
         </div>
       )}
@@ -184,9 +184,9 @@ function TransactionCard({ tx, index, onDownload }: { tx: Transaction; index: nu
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.2 }}
       style={{
-        background: 'var(--surface)',
-        border: '1px solid var(--border)',
-        borderRadius: 'var(--radius-lg)',
+        background: 'rgb(240, 250, 248)',
+        border: '1px solid rgba(0, 95, 86, 0.2)',
+        borderRadius: 'var(--radius-sm)',
         overflow: 'hidden',
       }}
     >
@@ -197,7 +197,7 @@ function TransactionCard({ tx, index, onDownload }: { tx: Transaction; index: nu
       }}>
         <div style={{
           width: 40, height: 40, flexShrink: 0,
-          background: 'var(--surface2)',
+          background: 'var(--primary)',
           border: '1px solid var(--border)',
           borderRadius: '10px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -206,10 +206,10 @@ function TransactionCard({ tx, index, onDownload }: { tx: Transaction; index: nu
           {BILL_ICON[tx.bill_type] ?? '🧾'}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text)', fontFamily: 'var(--font-display)' }}>
+          <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--primary)', fontFamily: 'var(--font-title)' }}>
             {tx.provider_name}
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px', fontFamily: 'monospace' }}>
+          <div style={{ fontSize: '14px', color: 'var(--text)', marginTop: '2px', fontFamily: 'var(--font-body)' }}>
             {tx.meter_number}
           </div>
         </div>

@@ -74,7 +74,7 @@ api.interceptors.response.use(
       parsed.state.accessToken = newAccess
       localStorage.setItem('noq-auth', JSON.stringify(parsed))
 
-      const { useAuthStore } = await import('../store/authStore')
+      const { useAuthStore } = await import('@/store/authStore')
       useAuthStore.getState().setTokens(newAccess, refreshToken)
 
       processQueue(null, newAccess)
@@ -82,7 +82,7 @@ api.interceptors.response.use(
       return api(original)
     } catch (refreshError) {
       processQueue(refreshError, null)
-      const { useAuthStore } = await import('../store/authStore')
+      const { useAuthStore } = await import('@/store/authStore')
       useAuthStore.getState().logout()
       return Promise.reject(refreshError)
     } finally {
@@ -178,3 +178,93 @@ export async function downloadReceipt(id: string): Promise<Blob> {
 }
 
 export default api
+
+// ── Wallet ────────────────────────────────────────────────────────────────────
+
+export interface WalletData {
+  id: string
+  balance: string       // Django Decimal comes as string
+  currency: string
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface WalletTransaction {
+  id: string
+  type: 'credit' | 'debit'
+  source: string
+  amount: string
+  balance_before: string
+  balance_after: string
+  reference: string
+  description: string
+  bill_transaction_id: string | null
+  created_at: string
+}
+
+export interface WalletBalanceResponse {
+  wallet: WalletData
+  recent_transactions: WalletTransaction[]
+}
+
+export interface InitiateFundingResponse {
+  reference: string
+  paystackPublicKey: string
+  accessCode: string
+  amount: number        // kobo
+  email: string
+  fundingId: string | null
+}
+
+export interface WalletPayResponse {
+  transaction: import('@/types').Transaction
+  wallet: WalletData
+}
+
+export async function fetchWalletBalance(): Promise<WalletBalanceResponse> {
+  const { data } = await api.get<WalletBalanceResponse>('/wallet/')
+  return data
+}
+
+export async function initiateWalletFunding(params: {
+  amount: number
+  email: string
+}): Promise<InitiateFundingResponse> {
+  const { data } = await api.post<InitiateFundingResponse>('/wallet/fund/initiate/', params)
+  return data
+}
+
+export async function verifyWalletFunding(reference: string): Promise<{
+  funding: { status: string; amount: string }
+  wallet: WalletData | null
+}> {
+  const { data } = await api.post('/wallet/fund/verify/', { reference })
+  return data
+}
+
+export async function fetchWalletTransactions(): Promise<{ results: WalletTransaction[]; count: number }> {
+  const { data } = await api.get('/wallet/transactions/')
+  return data
+}
+
+export async function payBillFromWallet(params: {
+  billType: string
+  providerId: string
+  meterNumber: string
+  meterType: string
+  amount: number
+  phone: string
+  email: string
+}): Promise<WalletPayResponse> {
+  const { data } = await api.post<WalletPayResponse>('/wallet/pay/', {
+    bill_type:    params.billType,
+    provider_id:  params.providerId,
+    meter_number: params.meterNumber,
+    meter_type:   params.meterType,
+    amount:       params.amount,
+    phone:        params.phone,
+    email:        params.email,
+  })
+  return data
+}
