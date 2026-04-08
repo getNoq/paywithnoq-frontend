@@ -504,7 +504,6 @@ export function Step2MeterDetails() {
             onChange={e => setAmount(e.target.value)}
             placeholder="0"
             min={500}
-            step={100}
             className='amount-input '
             style={{
               width: '100%',
