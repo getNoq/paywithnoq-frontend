@@ -2,14 +2,15 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { login, fetchMe } from '@/lib/api'
+import api, { fetchMe } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/primitives'
 import { Input } from '@/components/ui/primitives'
+import { EmailVerification } from './EmailVerification'
 
 const schema = z.object({
   email:    z.string().email('Enter a valid email address'),
@@ -26,29 +27,53 @@ interface Props {
 export function SignIn({ onSuccess, onSwitchToRegister, onContinueAsGuest }: Props) {
   const { setTokens, setUser } = useAuthStore()
   const [showPassword, setShowPassword] = useState(false)
+  // If backend returns requires_verification, show verification screen
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null)
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
   })
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (values: FormValues) => {
-      const tokens = await login({ email: values.email, password: values.password })
-      setTokens(tokens.access, tokens.refresh)
+    mutationFn: (values: FormValues) =>
+      api.post('/auth/token/', { email: values.email, password: values.password }),
+    onSuccess: async (response) => {
+      const { access, refresh } = response.data
+      setTokens(access, refresh)
       const me = await fetchMe()
       setUser(me)
-      return me
-    },
-    onSuccess: () => {
       toast.success('Welcome back!')
       onSuccess()
     },
     onError: (err: any) => {
-      const msg = err?.response?.data?.detail || 'Incorrect email or password.'
-      toast.error(msg)
+      const data = err?.response?.data
+
+      // Backend sends 403 when email is not verified
+      if (err?.response?.status === 403 && data?.requires_verification) {
+        setPendingEmail(data.email)
+        return
+      }
+
+      toast.error(data?.detail || 'Incorrect email or password.')
     },
   })
 
+  // ── Verification screen ───────────────────────────────────────────────────
+  if (pendingEmail) {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div key="verify">
+          <EmailVerification
+            email={pendingEmail}
+            onSuccess={onSuccess}
+            onBack={() => setPendingEmail(null)}
+          />
+        </motion.div>
+      </AnimatePresence>
+    )
+  }
+
+  // ── Sign in form ──────────────────────────────────────────────────────────
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -67,8 +92,8 @@ export function SignIn({ onSuccess, onSwitchToRegister, onContinueAsGuest }: Pro
         </p>
       </div>
 
-      <form onSubmit={handleSubmit((v) => mutate(v))} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-
+      <form onSubmit={handleSubmit(v => mutate(v))} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        
         <Input
           label="Email address"
           type="email"
@@ -89,7 +114,7 @@ export function SignIn({ onSuccess, onSwitchToRegister, onContinueAsGuest }: Pro
             <button
               type="button"
               onClick={() => setShowPassword(p => !p)}
-              style={{
+              style={{ 
                 background: 'none', border: 'none', cursor: 'pointer',
                 color: 'var(--text-muted)', display: 'flex', alignItems: 'center',
                 padding: '4px 6px',

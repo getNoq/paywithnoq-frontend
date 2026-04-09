@@ -2,22 +2,21 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Eye, EyeOff, Mail, Lock, User, Phone } from 'lucide-react'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import { register as registerUser, login, fetchMe } from '@/lib/api'
-import { useAuthStore } from '@/store/authStore'
-import { Button } from '@/components/ui/primitives'
-import { Input } from '@/components/ui/primitives'
+import api from '@/lib/api'
+import { Button, Input } from '@/components/ui/primitives'
+import { EmailVerification } from './EmailVerification'
 
 const schema = z.object({
   email:    z.string().email('Enter a valid email address'),
-  username: z.string().min(3, 'Username must be at least 3 characters').max(30).regex(/^\w+$/, 'Letters, numbers and underscores only'),
+  username: z.string().min(3, 'At least 3 characters').max(30).regex(/^\w+$/, 'Letters, numbers and underscores only'),
   phone:    z.string().regex(/^(070|080|081|090|091)\d{8}$/, 'Enter a valid Nigerian phone number'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: z.string().min(8, 'At least 8 characters'),
   confirm:  z.string(),
-}).refine((d) => d.password === d.confirm, {
+}).refine(d => d.password === d.confirm, {
   message: "Passwords don't match",
   path: ['confirm'],
 })
@@ -31,40 +30,54 @@ interface Props {
 }
 
 export function SignUp({ onSuccess, onSwitchToSignIn, onContinueAsGuest }: Props) {
-  const { setTokens, setUser } = useAuthStore()
   const [showPassword, setShowPassword] = useState(false)
+  // After register succeeds, switch to verification screen
+  const [pendingEmail, setPendingEmail] = useState<string | null>(null)
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
   })
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (values: FormValues) => {
-      await registerUser({
+    mutationFn: (values: FormValues) =>
+      api.post('/auth/register/', {
         email:    values.email,
         username: values.username,
         phone:    values.phone,
         password: values.password,
-      })
-      // Auto sign in after registration
-      const tokens = await login({ email: values.email, password: values.password })
-      setTokens(tokens.access, tokens.refresh)
-      const me = await fetchMe()
-      setUser(me)
-      return me
-    },
-    onSuccess: () => {
-      toast.success('Account created! Welcome to NOQ.')
-      onSuccess()
+      }),
+    onSuccess: (_, variables) => {
+      // Show verification screen — do NOT sign in yet
+      setPendingEmail(variables.email)
     },
     onError: (err: any) => {
       const data = err?.response?.data
-      // Show first field error from Django
-      const firstError = data?.email?.[0] || data?.username?.[0] || data?.phone?.[0] || data?.detail || 'Registration failed.'
-      toast.error(firstError)
+      const first =
+        data?.email?.[0] ||
+        data?.username?.[0] ||
+        data?.phone?.[0] ||
+        data?.detail ||
+        'Registration failed. Please try again.'
+      toast.error(first)
     },
   })
 
+  // ── Verification screen ───────────────────────────────────────────────────
+  if (pendingEmail) {
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div key="verify">
+          <EmailVerification
+            email={pendingEmail}
+            onSuccess={onSuccess}
+            onBack={() => setPendingEmail(null)}
+          />
+        </motion.div>
+      </AnimatePresence>
+    )
+  }
+
+  // ── Registration form ─────────────────────────────────────────────────────
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -83,7 +96,7 @@ export function SignUp({ onSuccess, onSwitchToSignIn, onContinueAsGuest }: Props
       </div>
 
       <form
-        onSubmit={handleSubmit((v) => mutate(v))}
+        onSubmit={handleSubmit(v => mutate(v))}
         style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
       >
         <Input
@@ -154,7 +167,7 @@ export function SignUp({ onSuccess, onSwitchToSignIn, onContinueAsGuest }: Props
           variant="primary"
           size="lg"
           loading={isPending}
-              style={{
+          style={{
                 width: '100%',
                 // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
                 background: 'var(--black)',
