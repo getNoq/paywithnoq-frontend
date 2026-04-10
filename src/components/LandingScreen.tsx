@@ -48,6 +48,7 @@ export function LandingScreen({ onSignIn, onSignUp, onGuest }: Props) {
       alignItems: 'center',
       position: 'relative',
       overflow: 'hidden',
+      justifyContent: 'center',
     }}>
       {/* Background scene — Nigerian landmarks, anchored bottom */}
       {/* <NigerianSceneBackground /> */}
@@ -79,7 +80,7 @@ export function LandingScreen({ onSignIn, onSignUp, onGuest }: Props) {
 
       {/* Content layer */}
       <div style={{
-        position: 'relative',
+        position: 'fixed',
         zIndex: 2,
         width: '90%',
         maxWidth: 512,
@@ -133,7 +134,7 @@ export function LandingScreen({ onSignIn, onSignUp, onGuest }: Props) {
             fontWeight: 900,
             color: '#111111',
             lineHeight: 1.08,
-            letterSpacing: '-1.5px',
+            letterSpacing: '-1px',
             marginBottom: 14,
             textAlign: 'center',
           }}>
