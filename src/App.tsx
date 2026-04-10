@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
-import { AppLayout } from '@/components/layout/AppLayout'
+// import { AppLayout } from '@/components/layout/AppLayout'
+import { AppRoot } from './AppRoot'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -12,7 +13,8 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AppLayout />
+      {/* <AppLayout /> */}
+      <AppRoot />
       <Toaster
         position="top-center"
         toastOptions={{

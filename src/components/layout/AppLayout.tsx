@@ -187,11 +187,24 @@ function AuthTab({ defaultView = 'signin', onSuccess, onContinueAsGuest, onOpenW
 }
 
 // ── App layout ────────────────────────────────────────────────────────────────
-export function AppLayout() {
-  const contentRef = useRef<HTMLDivElement>(null)
+// export function AppLayout() {
+//   const contentRef = useRef<HTMLDivElement>(null)
 
-  const [tab, setTab] = useState<Tab>('pay')
-  const [authDefaultView, setAuthDefaultView] = useState<AuthView>('signin')
+//   const [tab, setTab] = useState<Tab>('pay')
+//   const [authDefaultView, setAuthDefaultView] = useState<AuthView>('signin')
+//   const { step, currentTransaction, setStep } = usePaymentStore()
+//   const { isAuthenticated, user } = useAuthStore()
+
+interface AppLayoutProps {
+  initialAuthIntent?: 'signin' | 'signup' | null
+}
+ 
+export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [tab, setTab] = useState<Tab>(initialAuthIntent ? 'auth' : 'pay')
+  const [authDefaultView, setAuthDefaultView] = useState<AuthView>(
+    initialAuthIntent === 'signup' ? 'signup' : 'signin'
+  )
   const { step, currentTransaction, setStep } = usePaymentStore()
   const { isAuthenticated, user } = useAuthStore()
 
@@ -291,7 +304,7 @@ export function AppLayout() {
           <div style={{ display: 'flex', width: '100%', maxWidth: '1280px', justifyContent: 'space-between', alignItems: 'center', margin: '0 auto' }}>
 
             {/* Logo */}
-            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '28px', lineHeight: '28px', color: 'var(--white)' }}>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '28px', lineHeight: '28px', color: '#111' }}>
               NOQ
             </span>
 
@@ -302,10 +315,10 @@ export function AppLayout() {
                 onClick={() => openAuth('signin')}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '6px',
-                  background: 'white', border: '1px solid var(--border)',
-                  borderRadius: '100px', padding: '8px 16px',
-                  fontSize: '15px', color: '#111', fontWeight: 600,
-                  cursor: 'pointer',
+                  background: '#111', border: '1px solid var(--border)',
+                  borderRadius: '100px', padding: '12px 16px',
+                  fontSize: '15px', color: '#fff', fontWeight: 500,
+                  cursor: 'pointer', letterSpacing: '1px',
                 }}
               >
                 Sign in
