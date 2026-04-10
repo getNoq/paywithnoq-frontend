@@ -329,10 +329,10 @@ export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
                 onClick={() => setTab('auth')}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '6px',
-                  background: 'rgb(240, 250, 248)', backdropFilter: 'blur(8px)',
-                  border: '1px solid var(--border)', borderRadius: '20px',
-                  padding: '4px 8px 4px 4px', fontFamily: 'var(--font-title)', fontSize: '14px', fontWeight: 500, color: 'var(--primary)',
-                  cursor: 'pointer',
+                  background: '#111', border: '1px solid var(--border)',
+                  borderRadius: '100px', padding: '12px 16px',
+                  fontSize: '15px', color: '#fff', fontWeight: 500,
+                  cursor: 'pointer', letterSpacing: '1px',
                 }}
               >
                 <div style={{
