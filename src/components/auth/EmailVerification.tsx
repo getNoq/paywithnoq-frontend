@@ -122,21 +122,21 @@ export function EmailVerification({ email, onSuccess, onBack }: Props) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.22 }}
-      style={{ display: 'flex', flexDirection: 'column', gap: '0' }}
+      style={{ display: 'flex', flexDirection: 'column', gap: '0', alignItems: 'center' }}
     >
       {/* Icon */}
       <div style={{
-        width: 56, height: 56, borderRadius: '16px', marginBottom: '20px',
+        width: 56, height: 56, borderRadius: '16px', marginBottom: '12px',
         background: 'rgba(0,200,83,0.1)', border: '1.5px solid rgba(0,200,83,0.2)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         <Mail size={24} style={{ color: 'var(--green)' }} />
       </div>
 
-      <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: 'var(--white)', marginBottom: '8px' }}>
+      <h1 style={{ fontFamily: 'var(--font-title)', fontSize: '24px', fontWeight: 600, color: 'var(--black)', marginBottom: '8px' }}>
         Check your email
       </h1>
-      <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '28px', lineHeight: 1.6 }}>
+      <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '28px', lineHeight: 1.6, maxWidth: 320, textAlign: 'center' }}>
         We sent a 6-digit code to{' '}
         <span style={{ color: 'var(--green)', fontWeight: 600 }}>{email}</span>.
         Enter it below to verify your account.
@@ -158,21 +158,21 @@ export function EmailVerification({ email, onSuccess, onBack }: Props) {
             onChange={e => handleChange(i, e.target.value)}
             onKeyDown={e => handleKeyDown(i, e)}
             style={{
-              width: 48, height: 58,
+              width: 56, height: 56,
               textAlign: 'center',
               fontSize: '24px',
               fontFamily: 'var(--font-display)',
               fontWeight: 800,
-              background: 'var(--surface2)',
-              border: `2px solid ${digit ? 'var(--green)' : 'var(--border)'}`,
-              borderRadius: 'var(--radius-md)',
+              background: '#fff',
+              border: `2px solid ${digit ? 'var(--green)' : '#D0D5DD'}`,
+              borderRadius: 'var(--radius-xs)',
               color: 'var(--text)',
               outline: 'none',
               transition: 'var(--transition)',
               caretColor: 'var(--green)',
             }}
-            onFocus={e => { e.target.style.borderColor = 'var(--green)'; e.target.style.boxShadow = '0 0 0 3px rgba(0,200,83,0.1)' }}
-            onBlur={e => { e.target.style.borderColor = digit ? 'var(--green)' : 'var(--border)'; e.target.style.boxShadow = 'none' }}
+            onFocus={e => { e.target.style.borderColor = 'var(--primary)'; e.target.style.boxShadow = '0 0 0 1px var(--primary)' }}
+            onBlur={e => { e.target.style.borderColor = digit ? 'var(--primary)' : 'var(--border)'; e.target.style.boxShadow = 'none' }}
           />
         ))}
       </div>
@@ -185,8 +185,23 @@ export function EmailVerification({ email, onSuccess, onBack }: Props) {
         loading={verifying}
         disabled={!isFilled}
         onClick={() => verify(code.join(''))}
-        style={{ width: '100%', marginBottom: '16px' }}
-      >
+        style={{
+          width: '100%',
+          // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
+          background: 'var(--black)',
+          border: 'none',
+          borderRadius: 'var(--radius-xs)',
+          padding: '16px',
+          color: '#f5f5f0',
+          fontFamily: 'var(--font-medium)',
+          fontWeight: 500,
+          fontSize: '14px',
+          cursor: 'pointer',
+          // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
+          transition: 'var(--transition)',
+          letterSpacing: '0.02em',
+          marginBottom: '16px',
+        }}>
         Verify email
       </Button>
 
@@ -203,7 +218,7 @@ export function EmailVerification({ email, onSuccess, onBack }: Props) {
             disabled={resending}
             style={{
               background: 'none', border: 'none', cursor: 'pointer',
-              color: 'var(--text-muted)', fontSize: '13px',
+              color: 'var(--green)', fontSize: '13px',
               fontFamily: 'var(--font-body)',
               display: 'inline-flex', alignItems: 'center', gap: '6px',
             }}

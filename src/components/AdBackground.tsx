@@ -27,52 +27,52 @@ const STATIC_ADS: Ad[] = [
     id: 'mtn-1',
     brand: 'MTN Nigeria',
     tagline: 'Everywhere You Go',
-    imageUrl: '/images/mtnng.png', // fallback
-    mobileImageUrl: '/images/mtnng-mobile.jpg',
-    desktopImageUrl: '/images/mtnng.png',
+    imageUrl: '/images/login.webp', // fallback
+    mobileImageUrl: '/images/login.webp',
+    desktopImageUrl: '/images/login.webp',
     linkUrl: 'https://mtn.ng',
     overlayOpacity: 0.82,
   },
-  {
-    id: 'gt-1',
-    brand: 'GTBank',
-    tagline: 'Designed Around You',
-    imageUrl: '/images/Foodanddrink-gtb.jpg', // fallback
-    mobileImageUrl: '/images/Foodanddrink-gtb.jpg',
-    desktopImageUrl: '/images/Foodanddrink-gtb.jpg',
-    linkUrl: 'https://gtbank.com',
-    overlayOpacity: 0.84,
-  },
-  {
-    id: 'dangote-1',
-    brand: 'Dangote',
-    tagline: 'Building Africa',
-    imageUrl: '/images/dangote.jpg', // fallback
-    mobileImageUrl: '/images/dangote.jpg',
-    desktopImageUrl: '/images/dangote.jpg',
-    linkUrl: 'https://dangote.com',
-    overlayOpacity: 0.80,
-  },
-  {
-    id: 'airtel-1',
-    brand: 'Airtel Nigeria',
-    tagline: 'The Smartphone Network',
-    imageUrl: '/images/airtelng.jpg', // fallback
-    mobileImageUrl: '/images/airtelng.jpg',
-    desktopImageUrl: '/images/airtelng.jpg',
-    linkUrl: 'https://airtel.com.ng',
-    overlayOpacity: 0.83,
-  },
-  {
-    id: 'access-1',
-    brand: 'Access Bank',
-    tagline: 'More Than Banking',
-    imageUrl: '/images/access-bank.png', // fallback
-    mobileImageUrl: '/images/access-bank.jpg',
-    desktopImageUrl: '/images/access-bank.jpg',
-    linkUrl: 'https://accessbankplc.com',
-    overlayOpacity: 0.85,
-  },
+  // {
+  //   id: 'gt-1',
+  //   brand: 'GTBank',
+  //   tagline: 'Designed Around You',
+  //   imageUrl: '/images/Foodanddrink-gtb.jpg', // fallback
+  //   mobileImageUrl: '/images/Foodanddrink-gtb.jpg',
+  //   desktopImageUrl: '/images/Foodanddrink-gtb.jpg',
+  //   linkUrl: 'https://gtbank.com',
+  //   overlayOpacity: 0.84,
+  // },
+  // {
+  //   id: 'dangote-1',
+  //   brand: 'Dangote',
+  //   tagline: 'Building Africa',
+  //   imageUrl: '/images/dangote.jpg', // fallback
+  //   mobileImageUrl: '/images/dangote.jpg',
+  //   desktopImageUrl: '/images/dangote.jpg',
+  //   linkUrl: 'https://dangote.com',
+  //   overlayOpacity: 0.80,
+  // },
+  // {
+  //   id: 'airtel-1',
+  //   brand: 'Airtel Nigeria',
+  //   tagline: 'The Smartphone Network',
+  //   imageUrl: '/images/airtelng.jpg', // fallback
+  //   mobileImageUrl: '/images/airtelng.jpg',
+  //   desktopImageUrl: '/images/airtelng.jpg',
+  //   linkUrl: 'https://airtel.com.ng',
+  //   overlayOpacity: 0.83,
+  // },
+  // {
+  //   id: 'access-1',
+  //   brand: 'Access Bank',
+  //   tagline: 'More Than Banking',
+  //   imageUrl: '/images/access-bank.png', // fallback
+  //   mobileImageUrl: '/images/access-bank.jpg',
+  //   desktopImageUrl: '/images/access-bank.jpg',
+  //   linkUrl: 'https://accessbankplc.com',
+  //   overlayOpacity: 0.85,
+  // },
 ]
 
 function pickRandom<T>(arr: T[]): T {
@@ -182,7 +182,7 @@ export function AdBackground({ ads }: AdBackgroundProps) {
       />
 
       {/* ── Ad badge — bottom left, above nav ── */}
-      <div
+      {/* <div
         style={{
           position: 'fixed',
           bottom: 80,   // sits just above the bottom nav
@@ -196,9 +196,9 @@ export function AdBackground({ ads }: AdBackgroundProps) {
           transition: 'opacity 0.6s ease 0.3s',
           pointerEvents: ad.linkUrl ? 'auto' : 'none',
         }}
-      >
+      > */}
         {/* Sponsored label */}
-        <span style={{
+        {/* <span style={{
           fontSize: '9px',
           fontWeight: 600,
           letterSpacing: '1.5px',
@@ -207,10 +207,10 @@ export function AdBackground({ ads }: AdBackgroundProps) {
           fontFamily: 'var(--font-body)',
         }}>
           Sponsored
-        </span>
+        </span> */}
 
         {/* Brand name + tagline */}
-        {ad.linkUrl ? (
+        {/* {ad.linkUrl ? (
           <a
             href={ad.linkUrl}
             target="_blank"
@@ -221,8 +221,8 @@ export function AdBackground({ ads }: AdBackgroundProps) {
           </a>
         ) : (
           <AdBadgeContent ad={ad} />
-        )}
-      </div>
+        )} */}
+      {/* </div> */}
     </>
   )
 }
