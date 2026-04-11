@@ -70,7 +70,7 @@ export function LandingScreen({ onSignIn, onSignUp, onGuest }: Props) {
                   background: '#111', border: '1px solid var(--border)',
                   borderRadius: '100px', padding: '12px 16px',
                   fontSize: '15px', color: '#fff', fontWeight: 500,
-                  cursor: 'pointer', letterSpacing: '1px',
+                  cursor: 'pointer', letterSpacing: '0.5px',
                 }}
               >
                 About Us
@@ -279,10 +279,10 @@ export function LandingScreen({ onSignIn, onSignUp, onGuest }: Props) {
             onClick={onSignIn}
             style={{
               width: '100%',
-              padding: '16px',
+              padding: '15px',
               background: '#111111',
-              border: 'none',
-              borderRadius: 12,
+              border: '1.5px solid #111111',
+              borderRadius: 'var(--radius-xs)',
               color: '#FFFFFF',
               fontFamily: 'var(--font-title)',
               fontWeight: 500,
@@ -292,7 +292,7 @@ export function LandingScreen({ onSignIn, onSignUp, onGuest }: Props) {
               alignItems: 'center',
               justifyContent: 'center',
               gap: 8,
-              letterSpacing: '-0.2px',
+            //   letterSpacing: '-0.2px',
             }}
           >
             Sign in to your account

@@ -51,7 +51,7 @@ export function Step1BillType({ onOpenWallet }: Props) {
                   padding: '16px 10px',
                   background: isSelected ? 'var(--primary)' : opt.available ? '#F0FAF8' : '#F5F5F5 ',
                   border: `1px solid ${isSelected ? 'var(--primary)' : opt.available ? 'rgba(0, 95, 86, 0.2)' : 'var(--border)'}`,
-                  borderRadius: 'var(--radius-xs)',
+                  borderRadius: '4px',
                   cursor: opt.available ? 'pointer' : 'not-allowed',
                   opacity: opt.available ? 1 : 1,
                   transition: 'var(--transition)',

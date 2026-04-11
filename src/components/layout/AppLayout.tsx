@@ -304,7 +304,7 @@ export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
           <div style={{ display: 'flex', width: '100%', maxWidth: '1280px', justifyContent: 'space-between', alignItems: 'center', margin: '0 auto' }}>
 
             {/* Logo */}
-            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '28px', lineHeight: '28px', color: '#111' }}>
+            <span onClick={() => setTab('pay')} style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '28px', lineHeight: '28px', color: '#111', cursor: 'pointer', userSelect: 'none' }}>
               NOQ
             </span>
 
@@ -439,7 +439,8 @@ export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
                   <button
                     type="button"
-                    onClick={() => setTab('pay')}
+                    // onClick={() => setTab('pay')}
+                    onClick={() => setTab('auth')}
                     style={{
                       background: 'transparent', border: '1.5px solid var(--border)',
                       borderRadius: 'var(--radius-sm)', padding: '6px 10px',
