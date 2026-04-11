@@ -1,6 +1,6 @@
 // ─── Bill Types ───────────────────────────────────────────────────────────────
 
-export type BillType = 'electricity' | 'wallet' | 'airtime' | 'data' | 'cable' | 'sport' | 'lasg' | 'scratch_card' | 'transport'
+export type BillType = 'electricity' | 'airtime_data' | 'cable' | 'internet' | 'betting_gaming' | 'government_payments' | 'transport' | 'education' | 'utilities'
 
 export interface BillOption {
   id: BillType
@@ -13,15 +13,14 @@ export interface BillOption {
 
 export const billTypeLabels: Record<BillType, string> = {
   electricity: 'Electricity',
-  // water: 'Water',
-  airtime: 'Airtime',
-  data: 'Mobile Data',
+  airtime_data: 'Airtime & Data',
   cable: 'Cable TV',
-  sport: 'Sport Wallet',
-  lasg: 'LASG Payment',
-  scratch_card: 'Scratch Card',
+  internet: 'Internet',
+  betting_gaming: 'Betting / Gaming',
+  government_payments: 'Government Payments',
   transport: 'Transport & Tolls',
-  wallet: 'Noq Wallet',
+  education: 'Education',
+  utilities: 'Utilities',
 }
 
 // ─── Providers ────────────────────────────────────────────────────────────────

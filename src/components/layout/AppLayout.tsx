@@ -318,7 +318,7 @@ export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
                   background: '#111', border: '1px solid var(--border)',
                   borderRadius: '100px', padding: '12px 16px',
                   fontSize: '15px', color: '#fff', fontWeight: 500,
-                  cursor: 'pointer', letterSpacing: '1px',
+                  cursor: 'pointer', letterSpacing: '0.5px',
                 }}
               >
                 Sign in
@@ -332,19 +332,19 @@ export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
                   background: '#111', border: '1px solid var(--border)',
                   borderRadius: '100px', padding: '12px 16px',
                   fontSize: '15px', color: '#fff', fontWeight: 500,
-                  cursor: 'pointer', letterSpacing: '1px',
+                  cursor: 'pointer', letterSpacing: '0.5px',
                 }}
               >
-                <div style={{
+                {/* <div style={{
                   width: 28, height: 28, borderRadius: '50%',
                   background: 'var(--primary)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '14px', fontFamily: 'var(--font-title)', fontWeight: 600, color: 'white',
+                  fontSize: '14px', fontFamily: 'var(--font-title)', fontWeight: 600, color: 'white', letterSpacing: '0.5px',
                 }}>
                   {user?.username?.charAt(0).toUpperCase()}
-                </div>
-                {/* {user?.username} */}
-                Dashboard
+                </div> */}
+                Hi, {user?.username}
+                {/* Dashboard */}
               </button>
             )}
           </div>
