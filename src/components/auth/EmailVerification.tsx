@@ -6,6 +6,7 @@ import { Mail, RefreshCw } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { Button } from '@/components/ui/primitives'
 import api from '@/lib/api'
+import { useMediaQuery } from 'react-responsive'
 
 interface Props {
   email: string
@@ -18,6 +19,7 @@ export function EmailVerification({ email, onSuccess, onBack }: Props) {
   const [code, setCode] = useState(['', '', '', '', '', ''])
   const [cooldown, setCooldown] = useState(0)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
   // Focus first input on mount
   useEffect(() => {
@@ -145,7 +147,7 @@ export function EmailVerification({ email, onSuccess, onBack }: Props) {
       {/* 6-digit code inputs */}
       <div
         onPaste={handlePaste}
-        style={{ display: 'flex', gap: '10px', marginBottom: '24px', justifyContent: 'center' }}
+        style={{ display: 'flex', gap: isMobile ? '4px' : '8px', marginBottom: '24px', justifyContent: 'center' }}
       >
         {code.map((digit, i) => (
           <input
@@ -158,9 +160,9 @@ export function EmailVerification({ email, onSuccess, onBack }: Props) {
             onChange={e => handleChange(i, e.target.value)}
             onKeyDown={e => handleKeyDown(i, e)}
             style={{
-              width: 56, height: 56,
+              width: isMobile ? 48 : 56, height: isMobile ? 48 : 56,
               textAlign: 'center',
-              fontSize: '24px',
+              fontSize: isMobile ? '24px' : '32px',
               fontFamily: 'var(--font-display)',
               fontWeight: 800,
               background: '#fff',

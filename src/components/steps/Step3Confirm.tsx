@@ -163,7 +163,7 @@ export function Step3Confirm() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
+      style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
     >
       {/* Full summary */}
       <div style={{
@@ -305,7 +305,6 @@ export function Step3Confirm() {
       {!isAuthenticated && (
         <div
           style={{
-            marginTop: '12px',
             padding: '12px 14px',
             borderRadius: '4px',
             background: '#FFF3CC',
@@ -343,7 +342,7 @@ export function Step3Confirm() {
           // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
           background: 'var(--black)',
           border: 'none',
-          borderRadius: 'var(--radius-md)',
+          borderRadius: 'var(--radius-xs)',
           padding: '16px',
           color: '#f5f5f0',
           fontFamily: 'var(--font-medium)',
