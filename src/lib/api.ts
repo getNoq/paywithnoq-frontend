@@ -268,3 +268,22 @@ export async function payBillFromWallet(params: {
   })
   return data
 }
+
+export interface DVAResponse {
+  has_dva: boolean
+  account_number?: string
+  bank_name?: string
+  account_name?: string
+  creation_pending?: boolean
+  detail?: string
+}
+
+export async function fetchDVA(): Promise<DVAResponse> {
+  const { data } = await api.get<DVAResponse>('/wallet/dva/')
+  return data
+}
+
+export async function createDVA(): Promise<{ detail: string }> {
+  const { data } = await api.post('/wallet/dva/create/')
+  return data
+}

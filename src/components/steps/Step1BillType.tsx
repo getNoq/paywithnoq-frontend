@@ -5,6 +5,12 @@ import type { BillType } from '@/types'
 import { SecurityNote } from '../ui/SecurityNote'
 import { useMediaQuery } from 'react-responsive';
 import { useAuthStore } from '@/store/authStore'
+import { LogIn, Plus, Wallet } from 'lucide-react'
+import { useWalletBalance } from '@/hooks/useWallet'
+
+function fmt(n: string | number) {
+  return '₦' + Number(n).toLocaleString('en-NG', { minimumFractionDigits: 2 })
+}
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -24,13 +30,147 @@ export function Step1BillType({ onOpenWallet }: Props) {
   const providers = selectedBillType ? (PROVIDERS_BY_BILL_TYPE[selectedBillType] ?? []) : []
   const { isAuthenticated, user } = useAuthStore()
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const { data, isLoading, refetch, isFetching } = useWalletBalance()
+  // const { data: txData } = useWalletTransactions()
+  
+    const wallet = data?.wallet
+    const balance = Number(wallet?.balance ?? 0)
 
   return (
-    <motion.div variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <motion.div variants={stagger} initial="hidden" animate="show" style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '-18px' }}>
 
-      <p style={{ fontSize: isMobile ? '32px' : '40px', fontFamily: 'var(--font-title)', fontWeight: 700, color: 'var(--black)', marginBottom: '4px', letterSpacing: '-0.5px', lineHeight: isMobile ? '40px' : '48px', marginTop: isMobile ? '-16px' : '-24px', maxWidth: isMobile ? '100%' : '90%' }}>
+      {/* <p style={{ fontSize: isMobile ? '32px' : '40px', fontFamily: 'var(--font-title)', fontWeight: 700, color: 'var(--black)', marginBottom: '4px', letterSpacing: '-0.5px', lineHeight: isMobile ? '40px' : '48px', marginTop: isMobile ? '-16px' : '-24px', maxWidth: isMobile ? '100%' : '90%' }}>
         Get it done instantly with Noq
-      </p>
+      </p> */}
+
+      {/* ── NOQ Wallet card — appears above bill grid ── */}
+      <motion.div variants={fadeUp}>
+      {/* ── Balance card ── */}
+      <motion.div
+            style={{
+              background: 'linear-gradient(135deg, #005F56 0%, #003D36 100%)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '24px 16px',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Decorative rings */}
+            <div
+              style={{
+                position: 'absolute',
+                top: -40,
+                right: -40,
+                width: 160,
+                height: 160,
+                borderRadius: '50%',
+                border: '1px solid rgba(255,255,255,0.08)',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                top: -10,
+                right: -10,
+                width: 100,
+                height: 100,
+                borderRadius: '50%',
+                border: '1px solid rgba(255,255,255,0.06)',
+              }}
+            />
+
+            {/* Header */}
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between', alignItems: 'center', }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                <Wallet size={16} style={{ color: 'rgba(255,255,255,0.6)' }} />
+
+                <span
+                  style={{
+                    fontSize: '12px',
+                    color: 'rgba(255,255,255,0.6)',
+                    letterSpacing: '0.5px',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Available Balance
+                </span>
+              </div>
+
+              {/* Balance / Message */}
+              <div
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 500,
+                  fontSize: '28px',
+                  color: 'white',
+                  lineHeight: 1,
+                }}
+              >
+                {isAuthenticated
+                  ? fmt(balance)
+                  : 'Wallet Access'}
+              </div>
+
+              {/* Subtitle */}
+              {/* <div
+                style={{
+                  fontSize: '13px',
+                  color: 'rgba(255,255,255,0.7)',
+                  marginBottom: '20px',
+                }}
+              >
+                {isAuthenticated
+                  ? `Hi ${user?.username} · Tap to view wallet details`
+                  : 'Track payments and enjoy faster checkout'}
+              </div> */}
+            
+            </div>
+
+            {/* Action Button */}
+            <button
+              type="button"
+              onClick={onOpenWallet}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'rgba(255,255,255,0.15)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: 'var(--radius-xs)',
+                padding: '8px',
+                color: 'white',
+                fontFamily: 'var(--font-title)',
+                fontWeight: 500,
+                fontSize: '14px',
+                cursor: 'pointer',
+                transition: 'var(--transition)',
+                height: '40px',
+                zIndex: 1,
+              }}
+            >
+              {isAuthenticated ? (
+                <>
+                  <Plus size={16} />
+                  Add Money
+                </>
+              ) : (
+                <>
+                  <LogIn size={16} />
+                  Sign In
+                </>
+              )}
+            </button>
+            </div>
+          
+        </motion.div>
+      </motion.div>
 
       {/* Bill type grid */}
       <motion.div variants={fadeUp}>
@@ -280,7 +420,7 @@ export function Step1BillType({ onOpenWallet }: Props) {
       {/* Continue button — only appears once provider is selected */}
       <AnimatePresence>
         {/* {selectedProvider && ( */}
-        {(selectedBillType && providers.length > 0) || selectedBillType === 'wallet' ? (
+        {(selectedBillType && providers.length > 0) && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -289,13 +429,7 @@ export function Step1BillType({ onOpenWallet }: Props) {
           >
             <button
               type="button"
-              onClick={() => {
-                if (selectedBillType === 'wallet') {
-                  onOpenWallet()
-                  return
-                }
-                usePaymentStore.getState().setStep(2)
-              }}
+              onClick={() => { usePaymentStore.getState().setStep(2) }}
               style={{
                 width: '100%',
                 // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
@@ -314,13 +448,11 @@ export function Step1BillType({ onOpenWallet }: Props) {
                 marginBottom: '12px',
               }}
             >
-              {selectedBillType === 'wallet'
-                ? 'Open Wallet'
-                : `Continue with ${selectedBillType}`}
+              Continue with {selectedBillType}
             </button>
             <SecurityNote />
           </motion.div>
-        ) : null}
+        )}
       </AnimatePresence>
     </motion.div>
   )
