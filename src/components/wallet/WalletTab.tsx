@@ -63,16 +63,16 @@ function DVACard() {
     return (
       <div style={{
         padding: '16px',
-        background: 'rgba(255,213,79,0.06)',
-        border: '1px solid rgba(255,213,79,0.2)',
-        borderRadius: 'var(--radius-md)',
+        background: 'rgb(255, 243, 204)',
+        border: '1.5px solid rgb(217, 198, 171)',
+        borderRadius: '4px',
         display: 'flex', flexDirection: 'column', gap: '10px',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <AlertCircle size={15} style={{ color: 'var(--gold)', flexShrink: 0 }} />
-          <span style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+          <AlertCircle size={15} style={{ color: 'var(--orange)', flexShrink: 0 }} />
+          <span style={{ fontSize: '13px', color: 'rgb(102, 112, 133)', lineHeight: 1.5 }}>
             {dva?.creation_pending
-              ? 'Your dedicated bank account is being set up — check back in a moment.'
+              ? 'Your dedicated bank account is being set up - check back in a moment.'
               : 'Could not create your account automatically.'}
           </span>
         </div>
@@ -124,7 +124,7 @@ function DVACard() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
           <span style={{
             fontFamily: 'var(--font-display)',
-            fontWeight: 800, fontSize: '22px', color: 'var(--text)',
+            fontWeight: 700, fontSize: '22px', color: 'var(--text)',
             letterSpacing: '2px',
           }}>
             {dva.account_number}
@@ -225,16 +225,16 @@ function PaystackFundSheet({ onClose }: { onClose: () => void }) {
       style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontFamily: 'var(--font-title)', fontWeight: 700, fontSize: '16px', color: 'var(--white)' }}>
-          Fund with Card / Instant
+        <span style={{ fontFamily: 'var(--font-title)', fontWeight: 600, fontSize: '16px', color: 'var(--text)', letterSpacing: '-0.5px' }}>
+          Fund with Card
         </span>
-        <button 
+        <button
           type="button"
           onClick={onClose}
           style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '20px' }}
-          >
-            ×
-          </button>
+        >
+          ×
+        </button>
       </div>
 
       {/* Amount input */}
@@ -249,20 +249,20 @@ function PaystackFundSheet({ onClose }: { onClose: () => void }) {
           value={amount}
           onChange={e => setAmount(e.target.value)}
           placeholder="0"
-            className='amount-input '
-            style={{
-              width: '100%',
-              background: '#FCFCFC',
-              border: `2px solid ${isValid && amount ? 'var(--primary)' : !amount ? 'var(--border)' : 'var(--danger)'}`,
-              borderRadius: 'var(--radius-xs)',
-              padding: '13px 14px 13px 42px',
-              color: 'var(--primary)',
-              fontFamily: 'var(--font-display)',
-              fontWeight: 800,
-              outline: 'none',
-              transition: 'var(--transition)',
-              // boxShadow: isValid && amount ? '0 0 0 4px rgba(0,200,83,0.08)' : 'none',
-            }}
+          className='amount-input '
+          style={{
+            width: '100%',
+            background: '#FCFCFC',
+            border: `2px solid ${isValid && amount ? 'var(--primary)' : !amount ? 'var(--border)' : 'var(--danger)'}`,
+            borderRadius: 'var(--radius-xs)',
+            padding: '13px 14px 13px 42px',
+            color: 'var(--primary)',
+            fontFamily: 'var(--font-display)',
+            fontWeight: 800,
+            outline: 'none',
+            transition: 'var(--transition)',
+            // boxShadow: isValid && amount ? '0 0 0 4px rgba(0,200,83,0.08)' : 'none',
+          }}
         />
       </div>
       {amount && !isValid && (
@@ -270,19 +270,14 @@ function PaystackFundSheet({ onClose }: { onClose: () => void }) {
       )}
 
       {/* Quick amounts */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+      <div className="quick-amounts">
         {QUICK.map(q => (
-          <motion.button key={q} type="button" whileTap={{ scale: 0.95 }}
+            <motion.button 
+            key={q}
+            type="button"
+            whileTap={{ scale: 0.95 }}
             onClick={() => setAmount(String(q))}
-            style={{
-              padding: '6px 12px',
-              background: numAmount === q ? 'rgba(0,200,83,0.1)' : 'var(--surface2)',
-              border: `1px solid ${numAmount === q ? 'var(--green)' : 'var(--border)'}`,
-              borderRadius: 'var(--radius-sm)',
-              color: numAmount === q ? 'var(--green)' : 'var(--text-muted)',
-              fontSize: '13px', fontWeight: 600, fontFamily: 'var(--font-display)',
-              cursor: 'pointer', outline: 'none',
-            }}
+            className={`quick-amount-btn ${numAmount === q ? 'active' : ''}`}
           >
             ₦{q.toLocaleString()}
           </motion.button>
@@ -290,8 +285,10 @@ function PaystackFundSheet({ onClose }: { onClose: () => void }) {
       </div>
 
       <Button
-        variant="primary" size="lg"
-        disabled={!isValid} loading={initiating || verifying}
+        variant="primary"
+        size="lg"
+        disabled={!isValid}
+        loading={initiating || verifying}
         onClick={() => {
           setPopupTriggered(false)
           initiate(
@@ -307,13 +304,29 @@ function PaystackFundSheet({ onClose }: { onClose: () => void }) {
             }
           )
         }}
-        style={{ width: '100%' }}
+        style={{
+            width: '100%',
+            // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',
+            background: 'var(--black)',
+            border: 'none',
+            borderRadius: 'var(--radius-xs)',
+            padding: '16px',
+            color: '#f5f5f0',
+            fontFamily: 'var(--font-medium)',
+            fontWeight: 500,
+            fontSize: '14px',
+            cursor: 'pointer',
+            // boxShadow: '0 4px 20px rgba(0,200,83,0.25)',
+            transition: 'var(--transition)',
+            letterSpacing: '0.02em',
+            marginBottom: '12px',
+        }}
       >
         {initiating ? 'Preparing…' : verifying ? 'Confirming…' : `Fund ${isValid ? fmt(numAmount) : 'Wallet'}`}
       </Button>
 
-      <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-faint)' }}>
-        Secured by Paystack
+      <p style={{ textAlign: 'center', fontSize: '12px', color: 'var(--text-faint)', marginTop: '-12px' }}>
+        Secured by Paystack · Funds available instantly
       </p>
     </motion.div>
   )
@@ -440,24 +453,24 @@ export function WalletTab() {
             type="button"
             onClick={() => setFundMethod(fundMethod === 'bank' ? null : 'bank')}
             style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
+              display: 'flex', alignItems: 'center', gap: '4px',
               background: fundMethod === 'bank' ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.12)',
               border: `1px solid ${fundMethod === 'bank' ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.18)'}`,
-              borderRadius: 'var(--radius-md)', padding: '9px 14px',
-              color: 'white', fontFamily: 'var(--font-display)', fontWeight: 700,
-              fontSize: '13px', cursor: 'pointer', transition: 'var(--transition)',
+              borderRadius: 'var(--radius-xs)', padding: '9px 14px',
+              color: 'white', fontFamily: 'var(--font-title)', fontWeight: 500,
+              fontSize: '12px', cursor: 'pointer', transition: 'var(--transition)',
             }}>
             <Building2 size={14} />
             Bank Transfer
           </button>
           <button type="button" onClick={() => setFundMethod(fundMethod === 'card' ? null : 'card')}
             style={{
-              display: 'flex', alignItems: 'center', gap: '8px',
+              display: 'flex', alignItems: 'center', gap: '4px',
               background: fundMethod === 'card' ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.12)',
               border: `1px solid ${fundMethod === 'card' ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.18)'}`,
-              borderRadius: 'var(--radius-md)', padding: '10px 20px',
-              color: 'white', fontFamily: 'var(--font-title)', fontWeight: 700,
-              fontSize: '14px', cursor: 'pointer', transition: 'var(--transition)',
+              borderRadius: 'var(--radius-xs)', padding: '9px 14px',
+              color: 'white', fontFamily: 'var(--font-title)', fontWeight: 500,
+              fontSize: '12px', cursor: 'pointer', transition: 'var(--transition)',
             }}>
             <CreditCard size={16} />
             Card / Instant
@@ -474,14 +487,16 @@ export function WalletTab() {
             exit={{ opacity: 0, height: 0 }}
             style={{ overflow: 'hidden' }}
           >
-            <div style={{
+            <div 
+            style={{
               background: 'rgb(245, 245, 245)',
               border: '1px solid var(--border)',
               borderRadius: 'var(--radius-sm)',
-              padding: '16px 12px', 
-              }}>
+              padding: '16px 12px',
+              overflow: 'hidden',
+            }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                <span style={{ fontFamily: 'var(--font-title)', fontWeight: 700, fontSize: '15px', color: 'var(--white)' }}>
+              <span style={{ fontFamily: 'var(--font-title)', fontWeight: 600, fontSize: '16px', color: 'var(--text)', letterSpacing: '-0.5px' }}>
                   Your bank account
                 </span>
                 <button type="button" onClick={() => setFundMethod(null)}
@@ -500,11 +515,15 @@ export function WalletTab() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            style={{ overflow: 'hidden' }}
+            style={{
+              background: 'rgb(245, 245, 245)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius-sm)',
+              padding: '16px 12px',
+              overflow: 'hidden',
+            }}
           >
-            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '18px 20px' }}>
-              <PaystackFundSheet onClose={() => setFundMethod(null)} />
-            </div>
+            <PaystackFundSheet onClose={() => setFundMethod(null)} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -517,21 +536,34 @@ export function WalletTab() {
           border: '1px solid rgba(255,213,79,0.2)',
           borderRadius: 'var(--radius-md)',
           color: 'var(--gold)',
-          }}>
+        }}>
           ⚠️ Low balance — top up to pay bills from your wallet
         </div>
       )}
 
-      {/* ── Recent activity ── */}
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '16px 18px' }}>
+      {/* ── Recent transactions ── */}
+      <div style={{
+        background: 'rgb(240, 250, 248)',
+        border: '1px solid rgba(0, 95, 86, 0.2)',
+        borderRadius: 'var(--radius-sm)',
+        padding: '16px 20px',
+      }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '15px', color: 'var(--white)' }}>Recent Activity</span>
-          <span style={{ fontSize: '12px', color: 'var(--text-faint)' }}>{txData?.count ?? 0} total</span>
+          <span style={{ fontFamily: 'var(--font-title)', fontWeight: 600, fontSize: '15px', color: 'var(--primary)' }}>
+            Recent Activity
+          </span>
+          <span style={{ fontSize: '12px', color: 'var(--text-faint)' }}>
+            {txData?.count ?? 0} total
+          </span>
         </div>
-        {recentTxs.length === 0
-          ? <div style={{ textAlign: 'center', padding: '28px 0', color: 'var(--text-faint)', fontSize: '13px' }}>No activity yet</div>
-          : recentTxs.map(tx => <TxRow key={tx.id} tx={tx} />)
-        }
+
+        {recentTxs.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '28px 0', color: 'var(--text-faint)', fontSize: '13px' }}>
+            No activity yet, fund your wallet to get started
+          </div>
+        ) : (
+          recentTxs.map(tx => <TxRow key={tx.id} tx={tx} />)
+        )}
       </div>
     </motion.div>
   )
