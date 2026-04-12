@@ -110,8 +110,29 @@ export interface VerifyPaymentResponse {
 
 export type Step = 1 | 2 | 3
 
+export type SubStep =
+  | 'airtime_data'
+  | 'meterDetails'
+  | 'electricity'
+  | 'utilities'
+  | 'cable'
+  | 'internet'
+  | 'betting_gaming'
+  | 'government_payments'
+  | 'transport'
+  | 'education'
+  | null
+
+type StepHistory = {
+  step: Step
+  subStep: SubStep
+}
+
 export interface PaymentStore {
   step: Step
+  subStep: SubStep
+  history: StepHistory[]   // ✅ FIXED  // ✅ NEW
+
   selectedBillType: BillType | null
   selectedProvider: Provider | null
   meterInfo: MeterInfo | null
@@ -121,6 +142,10 @@ export interface PaymentStore {
   currentTransaction: Transaction | null
 
   setStep: (step: Step) => void
+  setSubStep: (sub: SubStep) => void
+  advanceTo: (step: Step, subStep?: SubStep) => void  // ✅ NEW
+  goBack: () => void                // ✅ NEW
+
   setBillType: (bt: BillType) => void
   setProvider: (p: Provider) => void
   setMeterInfo: (m: MeterInfo) => void
