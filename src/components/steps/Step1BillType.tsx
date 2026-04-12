@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { usePaymentStore } from '@/store/paymentStore'
-import { BILL_OPTIONS, PROVIDERS_BY_BILL_TYPE } from '@/lib/data'
+import { BILL_OPTIONS, BILL_TYPE_FLOW, PROVIDERS_BY_BILL_TYPE } from '@/lib/data'
 import type { BillType } from '@/types'
 import { SecurityNote } from '../ui/SecurityNote'
 import { useMediaQuery } from 'react-responsive';
@@ -30,6 +30,14 @@ export function Step1BillType({ onOpenWallet }: Props) {
   const providers = selectedBillType ? (PROVIDERS_BY_BILL_TYPE[selectedBillType] ?? []) : []
   const { isAuthenticated, user } = useAuthStore()
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+  const flow = selectedBillType ? BILL_TYPE_FLOW[selectedBillType] : null
+
+const canContinue =
+  selectedBillType &&
+  (
+    !flow?.requiresProvider || selectedProvider
+  )
+  
   const { data, isLoading, refetch, isFetching } = useWalletBalance()
   // const { data: txData } = useWalletTransactions()
   
@@ -420,7 +428,8 @@ export function Step1BillType({ onOpenWallet }: Props) {
       {/* Continue button — only appears once provider is selected */}
       <AnimatePresence>
         {/* {selectedProvider && ( */}
-        {(selectedBillType && providers.length > 0) && (
+        {/* {(selectedBillType && providers.length > 0) && ( */}
+        {canContinue && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -429,7 +438,14 @@ export function Step1BillType({ onOpenWallet }: Props) {
           >
             <button
               type="button"
-              onClick={() => { usePaymentStore.getState().setStep(2) }}
+              // onClick={() => { usePaymentStore.getState().setStep(2) }}
+              onClick={() => {
+                const state = usePaymentStore.getState()
+                const flow = BILL_TYPE_FLOW[state.selectedBillType!]
+
+                state.setStep(flow.nextStep)
+                state.setSubStep(flow.stepKey as any)
+              }}
               style={{
                 width: '100%',
                 // background: 'linear-gradient(135deg, var(--orange) 0%, var(--orange-red) 100%)',

@@ -16,6 +16,7 @@ import { SignUp } from '@/components/auth/SignUp'
 import { BillsSceneBackground } from '../BillsSceneBackground'
 import toast from 'react-hot-toast'
 import { WalletTab } from '@/components/wallet/WalletTab'
+import { Step2AirtimeData } from '@/components/steps/Step2AirtimeData'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Tab = 'pay' | 'history' | 'auth' | 'wallet'
@@ -23,13 +24,39 @@ type AuthView = 'signin' | 'signup'
 
 // ── Pay steps ─────────────────────────────────────────────────────────────────
 function PayStep({ onOpenWallet }: { onOpenWallet: () => void }) {
-  const { step, currentTransaction } = usePaymentStore()
+  const { step, currentTransaction, selectedBillType } = usePaymentStore()
+
   if (currentTransaction) return <SuccessScreen />
+
+  // Route Step 2 based on bill type
+  function renderStep2() {
+    switch (selectedBillType) {
+      case 'airtime_data':
+        return <Step2AirtimeData />
+      case 'electricity':
+      default:
+        return <Step2MeterDetails />
+      // cable → add Step2Cable here when built
+    }
+  }
+
   return (
     <AnimatePresence mode="wait">
-      {step === 1 && <motion.div key="s1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><Step1BillType onOpenWallet={onOpenWallet} /></motion.div>}
-      {step === 2 && <motion.div key="s2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><Step2MeterDetails /></motion.div>}
-      {step === 3 && <motion.div key="s3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><Step3Confirm /></motion.div>}
+      {step === 1 && (
+        <motion.div key="s1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <Step1BillType onOpenWallet={onOpenWallet} />
+        </motion.div>
+      )}
+      {step === 2 && (
+        <motion.div key="s2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          {renderStep2()}
+        </motion.div>
+      )}
+      {step === 3 && (
+        <motion.div key="s3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <Step3Confirm />
+        </motion.div>
+      )}
     </AnimatePresence>
   )
 }
@@ -207,6 +234,21 @@ export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
   )
   const { step, currentTransaction, setStep } = usePaymentStore()
   const { isAuthenticated, user } = useAuthStore()
+  const [tabHistory, setTabHistory] = useState<Tab[]>(['pay'])
+
+  function navigateTab(tab: Tab) {
+     setTabHistory(h => [...h, tab])
+     setTab(tab)
+  }
+ 
+   function goBackTab() {
+     setTabHistory(h => {
+       if (h.length <= 1) return h
+       const prev = h[h.length - 2]
+       setTab(prev)
+        return h.slice(0, -1)
+     })
+   }
 
   // Scroll to top on step or tab change
   useEffect(() => {
@@ -216,9 +258,7 @@ export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
     })
   }, [step, tab])
 
-  function handleBack() {
-    if (step > 1) setStep((step - 1) as 1 | 2 | 3)
-  }
+  const { goBack } = usePaymentStore()
 
   // Opens auth tab — call this from header button, wallet card, history prompt
   function openAuth(view: AuthView = 'signin') {
@@ -383,7 +423,7 @@ export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
                   {step > 1 && !currentTransaction && (
                     <button
                       type="button"
-                      onClick={handleBack}
+                      onClick={() => goBack()}
                       style={{
                         // background: 'rgba(23, 32, 25, 0.7)',
                         background: 'transparent',
@@ -440,7 +480,8 @@ export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
                   <button
                     type="button"
                     // onClick={() => setTab('pay')}
-                    onClick={() => setTab('auth')}
+                    // onClick={() => setTab('auth')}
+                    onClick={goBackTab}
                     style={{
                       background: 'transparent', border: '1.5px solid var(--border)',
                       borderRadius: 'var(--radius-sm)', padding: '6px 10px',
@@ -472,7 +513,8 @@ export function AppLayout({ initialAuthIntent = null }: AppLayoutProps) {
                 {!isAuthenticated && (
                   <button
                     type="button"
-                    onClick={() => setTab('pay')}
+                    // onClick={() => setTab('pay')}
+                    onClick={goBackTab}
                     style={{
                       background: 'transparent', border: '1.5px solid var(--border)',
                       borderRadius: 'var(--radius-sm)', padding: '6px 10px',

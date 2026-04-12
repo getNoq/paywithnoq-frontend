@@ -169,6 +169,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   optional?: boolean          // shows "optional" badge next to label
   startIcon?: React.ReactNode
   verifyButton?: React.ReactNode
+  endAdornment?: React.ReactNode
 }
  
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(

@@ -105,7 +105,7 @@
   --gold-bg:      rgba(255, 213, 79, 0.08);
   --input-bg:      #F3F3F3; 
 
-  --radius-xs:   8px;
+  --radius-xs:   4px;
   --radius-sm:   8px;
   --radius-md:   12px;
   --radius-lg:   18px;
@@ -413,7 +413,7 @@ textarea {
   max-width: 23%;
   padding: 8px 14px;
   border: 1.5px solid #E5E7EB;
-  border-radius: var(--radius-xs);
+  border-radius: 4px;
   background-color: #FCFCFC;
   font-size: 13px;
   font-weight: 600;

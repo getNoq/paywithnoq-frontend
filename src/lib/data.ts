@@ -1,4 +1,4 @@
-import type { BillOption, Provider } from '@/types'
+import type { BillOption, BillType, Provider } from '@/types'
 
 export const BILL_OPTIONS: BillOption[] = [
   {
@@ -23,7 +23,7 @@ export const BILL_OPTIONS: BillOption[] = [
     icon: '📱',
     description: 'MTN, Airtel, Glo, 9mobile',
     phase: 3,
-    available: false,
+    available: true,
   },
   // {
   //   id: 'data',
@@ -111,3 +111,57 @@ export const PROVIDERS_BY_BILL_TYPE: Record<string, Provider[]> = {
 }
 
 export const QUICK_AMOUNTS = [1000, 2000, 5000, 10000]
+
+import type { Step, SubStep } from '@/types'
+
+export const BILL_TYPE_FLOW: Record<BillType, {
+  nextStep: Step
+  stepKey: SubStep
+  requiresProvider: boolean
+}> = {
+  airtime_data: {
+    nextStep: 2,
+    stepKey: 'airtime_data',
+    requiresProvider: false,
+  },
+  electricity: {
+    nextStep: 2,
+    stepKey: 'electricity',
+    requiresProvider: false,
+  },
+  utilities: {
+    nextStep: 2,
+    stepKey: 'utilities',
+    requiresProvider: true,
+  },
+  cable: {
+    nextStep: 2,
+    stepKey: 'cable',
+    requiresProvider: false,
+  },
+  internet: {
+    nextStep: 2,
+    stepKey: 'internet',
+    requiresProvider: false,
+  },
+  betting_gaming: {
+    nextStep: 2,
+    stepKey: 'betting_gaming',
+    requiresProvider: false,
+  },
+  government_payments: {
+    nextStep: 2,
+    stepKey: 'government_payments',
+    requiresProvider: false,
+  },
+  transport: {
+    nextStep: 2,
+    stepKey: 'transport',
+    requiresProvider: false,
+  },
+  education: {
+    nextStep: 2,
+    stepKey: 'education',
+    requiresProvider: false,
+  },
+}

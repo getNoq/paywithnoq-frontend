@@ -473,7 +473,7 @@ export function WalletTab() {
               fontSize: '12px', cursor: 'pointer', transition: 'var(--transition)',
             }}>
             <CreditCard size={16} />
-            Card / Instant
+            Card
           </button>
         </div>
       </div>
